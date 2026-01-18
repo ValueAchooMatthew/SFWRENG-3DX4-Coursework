@@ -1,0 +1,259 @@
+\documentclass[10pt]{article}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{soul}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.text}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xltabular}
+\usepackage{color}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{\thepage}
+\title{SFWRENG 3DX4 - Pre-lab 1}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{SFWRENG 3DX4 - Pre-lab 1}
+
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+
+\newcommand{\comment}[1]{\parbox[t]{0.45\textwidth}{\raggedright #1}}
+
+\setlength{\parindent}{0cm}
+
+\setcounter{tocdepth}{3}
+\hypersetup{bookmarksopen=true, bookmarksopenlevel=2, bookmarksdepth=3}
+
+\newcounter{question}
+\renewcommand{\thequestion}{\arabic{question}}
+
+\newenvironment{question}{
+	\refstepcounter{question}
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect{\large{Question \thequestion}}}
+	\vspace{1em}
+	\par
+	\large\textbf{Question \thequestion}
+	\vspace{.2cm}
+	\par
+	\setcounter{subquestion}{0}
+	\setcounter{step}{0}
+}{\vspace{.5em}}
+
+\newenvironment{solution}{
+	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+}{
+	\vspace{1em}
+}
+
+\newcounter{subquestion}
+\renewcommand{\thesubquestion}{\alph{subquestion}}
+
+\newenvironment{subquestion}{
+	\refstepcounter{subquestion}
+	\phantomsection
+	\vspace{1em}\par\large\textbf{(\thesubquestion)}\hspace{-.5em}
+	\setcounter{step}{0}
+	\addcontentsline{toc}{subsection}{\protect{\large{Part \thequestion.\thesubquestion}}}
+}{
+	\par
+	\vspace{1em}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+}{
+	\par
+	\vspace{1.5em}
+}
+
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\fontsize{10pt}{14pt}\selectfont
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\begin{question}
+	The general open-loop transfer function which models the angular velocity $\omega(t)$ of a motor is:
+
+	\begin{gather*}
+		G_{\omega} = \frac{\Omega(s)}{R(s)} = \frac{A}{\tau{s} + 1} \\
+	\end{gather*}
+
+	Where $A$ and $\tau$ are positive, real-valued constants and $\Omega(s) = \mathcal{L}\set{\omega(t)}$.
+\end{question}
+
+\begin{subquestion}
+	What is the transfer function for the angular position of the motor $\theta(t)$?
+\end{subquestion}
+
+\begin{solution}
+	We know that the angular velocity of a rotating body is given by:
+
+	\begin{gather*}
+		\omega(t) = \frac{d\theta(t)}{dt} \\
+	\end{gather*}
+
+	And since:
+
+	\begin{gather*}
+		L\set{\omega(t)} = \Omega(s) \implies L \left\{ \frac{d\theta(t)}{dt} \right\} = \Omega(s) \implies L\set{\theta(t)} = \frac{1}{s}\Omega(s) \\
+	\end{gather*}
+
+	We can express the transfer function in terms of $\theta(t)$ ($G_{\theta}$) as:
+
+	\begin{align*}
+		G_{\theta} &= \frac{L\set{\theta(t)}}{R(s)} \\
+		&= \frac{1}{s} \cdot \frac{\Omega(s)}{R(s)} \\
+		&= \frac{1}{s} \cdot \frac{A}{\tau{s} + 1} \\
+		&= \frac{A}{\tau{s}^{2} + s}
+	\end{align*}
+\end{solution}
+
+\begin{subquestion}
+	What, if any, is the steady-state value of $\omega$ in open loop response to a step input:
+
+	\begin{gather*}
+		r(t) = U_{o}u(t) = \begin{cases} U_{o}, \quad t \ge 0\\ 0, \quad \; \; t < 0 \end{cases}
+	\end{gather*}
+
+	Where $r(t) = \mathcal{L}^{-1}\set{R(s)}$ and $U_{o} \in \mathbb{R}$ is a constant voltage.
+\end{subquestion}
+
+\begin{solution}
+	We know that:
+
+	\begin{align*}
+		\frac{\Omega(s)}{R(s)} &= \frac{A}{\tau{s} + 1} \implies \\
+		\Omega(s) &= \frac{A}{\tau{s} + 1}R(s) \\
+	\end{align*}
+
+	Thus, since $\omega(t) = \mathcal{L}^{-1}\set{\Omega(s)}$, to find the
+	steady state response of $\omega(t)$ (its behaviour as $t \rightarrow
+	\infty$), we must find $L^{-1}\set{\frac{A}{\tau{s} + 1}}R(s)$. Let's
+	start by finding $R(s)$.
+
+	\begin{align*}
+		R(s) &= \mathcal{L}\set{r(t)} \\
+		&= \int_{0}^{\infty}r(t)e^{-st}dt \\
+		&= \int_{0}^{\infty}U_{o}e^{-st}dt \\
+		&= U_{o}\int_{0}^{\infty}e^{-st}dt \\
+		&= -\frac{1}{s}U_{o}e^{-st} \big|_{t = 0}^{t = \infty} \\
+	\end{align*}
+
+	And since $e^{-st} \rightarrow 0$ as $t \rightarrow \infty$:
+
+	\begin{align*}
+		R(s) &= \frac{1}{s}U_{o}e^{-s(0)}
+		&= \frac{U_{o}}{s} \\
+	\end{align*}
+
+	Therefore:
+
+	\begin{align*}
+		\Omega(s) &= \frac{A}{\tau{s} + 1}R(s) \\
+		&= \frac{A}{\tau{s} + 1}\left( \frac{U_{o}}{s} \right) \\
+		&= \frac{AU_{o}}{s(\tau{s} + 1)}
+	\end{align*}
+
+	The next step to compute $\omega(t)$, requires us to perform partial
+	fraction decomposition on $\frac{AU_{o}}{s(\tau{s} + 1)}$ so we can
+	find it from a lookup table. \\
+
+	Letting $B$ and $C$ be variables we will solve for, we can express $\frac{AU_{o}}{s(\tau{s} + 1)}$ as:
+
+	\begin{align*}
+		\frac{AU_{o}}{s(\tau{s} + 1)} &= \frac{B}{s} + \frac{C}{\tau{s} + 1} \implies \\
+		AU_{o} &= B(\tau{s} + 1) Cs \\
+		&= B\tau{s} + B + Cs \\
+	\end{align*}
+
+	By equating coefficients, we see that:
+	
+	\begin{gather*}
+		B = AU_{o} \\
+		B\tau{s} + C{s} = 0 \implies C = -B\tau \implies C = -AU_{o}\tau \\
+	\end{gather*}
+
+	And therefore:
+
+	\begin{gather*}
+		\frac{AU_{o}} = \frac{AU_{o}}{s} - \frac{AU_{o}\tau}{\tau{s} + 1} \\
+	\end{gather*}
+
+	Now, we can finally compute $w(t)$!
+
+	\begin{align*}
+		\omega(t) &= \mathcal{L}^{-1}\set{\Omega(s)} \\
+		&= \mathcal{L}^{-1} \left\{ \frac{AU_{o}}{s} + \frac{-AU_{o}\tau}{\tau{s} + 1} \right\} \\
+		&= \mathcal{L}^{-1} \left\{ \frac{AU_{o}}{s} \right\} + \mathcal{L}^{-1} \left\{ \frac{-AU_{o}\tau}{\tau{s} + 1} \right\} \\
+		&= \mathcal{L}^{-1} \left\{ \frac{AU_{o}}{s} \right\} + \mathcal{L}^{-1} \left\{ \frac{-AU_{o}\tau}{\tau(s + 1/\tau)} \right\} \\
+		&= \mathcal{L}^{-1} \left\{ \frac{AU_{o}}{s} \right\} + \mathcal{L}^{-1} \left\{ \frac{-AU_{o}}{s + 1/\tau} \right\} \\
+		&= AU_{o}\mathcal{L}^{-1} \left\{ \frac{1}{s} \right\} - AU_{o}\mathcal{L}^{-1} \left\{ \frac{1}{s + 1/\tau} \right\} \\
+	\end{align*}
+
+	And by use of a lookup table, we can therefore conclude that:
+
+	\begin{gather*}
+		\omega(t) = AU_{o}u(t) - AU_{o}e^{-\frac{1}{\tau}t} \\
+	\end{gather*}
+
+	As stated previously, the steady state of $\omega(t)$ is its behaviour as $t \rightarrow \infty$, and we can see that:
+
+	\begin{align*}
+		\lim_{t \rightarrow \infty} \omega(t) &= \lim_{t \rightarrow \infty}AU_{o}u(t) - AU_{o}e^{-\frac{1}{\tau}t} \\
+	\end{align*}
+
+	Since $\tau > 0$, we know that $e^{-\frac{1}{\tau}t} \rightarrow 0$ as
+	$t \rightarrow \infty$, and because $\forall t \ge 0, \; u(t) = 1$ trivially
+	means $u(t) \rightarrow 1$ as $t \rightarrow \infty$ we can finally conclude that:
+
+	\begin{align*}
+		\lim_{t\rightarrow\infty} \omega(t) &= AU_{o}(1) - AU_{o}(0) \\
+		&= AU_{o} \\
+	\end{align*}
+
+	Thus the steady state of $\omega(t)$ does indeed exist and is given by $AU_{o}$.
+\end{solution}
+
+\end{document}
