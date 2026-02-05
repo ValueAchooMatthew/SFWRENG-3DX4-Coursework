@@ -138,7 +138,11 @@
 \end{subquestion}
 
 \begin{solution}
-	We know that the steady state vale of $\omega(t)$ is given by $\lim_{t\to\infty}\omega(t)$. By the final value theorem, we know that $\lim_{t\to\infty}\omega(t) = \omega(\infty) = \lim_{s\to{0}}s\Omega(s)$. Since $\frac{\Omega(s)}{V(s)} = \frac{A}{\tau{s} + 1}$, we therefore know that:
+	We know that the steady state value of $\omega(t)$ is given by
+	$\lim_{t\to\infty}\omega(t)$. By the final value theorem, we know that
+	$\lim_{t\to\infty}\omega(t) = \omega(\infty) =
+	\lim_{s\to{0}}s\Omega(s)$. Since $\frac{\Omega(s)}{V(s)} =
+	\frac{A}{\tau{s} + 1}$, we therefore know that:
 
 	\begin{align*}
 		\Omega(s) &= \frac{AV(s)}{\tau{s} + 1} \\
@@ -150,7 +154,9 @@
 		s\Omega(s) &= \frac{sAV(s)}{\tau{s} + 1} \\
 	\end{align*}
 
-	Now, note that a step input of amplitude $V_{x}$ is given by $V_{x}{u(t)}$. By the linearity of the Laplace transform and the lookup table, we have that $\mathcal{L}\set{V_{x}u(t)} = \frac{V_{x}}{s}$, so:
+	Now, note that a step input of amplitude $V_{x}$ is given by
+	$V_{x}{u(t)}$. By the linearity of the Laplace transform and the lookup
+	table, we have that $\mathcal{L}\set{V_{x}u(t)} = \frac{V_{x}}{s}$, so:
 
 	\begin{align*}
 		s\Omega(s) &= \frac{sA{V_{x}}}{s(\tau{s} + 1)} \\
@@ -171,7 +177,7 @@
 	Give the expression for $\omega(t)$ in response to a step input $V_{x}$ at time $t = 0$.
 	Assume a non-zero initial condition for $\omega(t)$, i.e., $\omega(0) = \omega_0$. Note that
 	the response due to a non-zero initial condition $\omega_{0}$ can be modeled as the
-	response due to input $v(t) = \omega_{0}\delta(t)$ where $\delta(t)$ in the impulse function. Since
+	response due to input $v(t) = \omega_{0}\delta(t)$ where $\delta(t)$ in the impulse response. Since
 	$G_{\omega}(s)$ is a linear system, the response to step input $V_{x}$ with non-zero initial
 	condition $\omega_{0}$ is just the sum of the responses due to the step and the initial
 	condition.
@@ -317,7 +323,8 @@
 \end{question}
 
 \begin{solution}
-	From the graph, we can clearly observe that $\Delta{\omega} = 20$ and $\Delta{V} = 4$. Thus, using the formula developed in 1.d.), we have:
+	From the graph, we can clearly observe that $\Delta{\omega} = 20$ and
+	$\Delta{V} = 4$. Thus, using the formula developed in 1.d.), we have:
 
 	\begin{gather*}
 		A = \frac{\Delta{\omega}}{\Delta{V}} = \frac{20}{4} = 5 \\
@@ -331,31 +338,33 @@
 	in Fig. 1.
 \end{question}
 
-%TODO: Complete
 \begin{solution}
-	Since $\tau$ represents the time the system needs to reach 63.2\% of its steady state value, and since we know that the system's steady state value is evidently 25 from observing the graph, we know $$
+	Reading off the graph, we can infer that $t_0 \approx .75$ and $t_1
+	\approx .80$. Hence:
 
-	\begin{align*}
-		\tau = t_1 - t_0 \\
-		\omega(t_1) = .632\Delta{\omega} + \omega_0
-		&= .632{20} + 5
-		&= 17.64
-	\end{align*}
-
+	\begin{gather*}
+		\tau  = t_1 - t_0 \approx .80 - .75 \approx .05
+	\end{gather*}
 \end{solution}
 
-%TODO: Complete
 \begin{question}
-	Using $A$ and $\tau$, give the transfer function $G_{\omega}(s)$ in terms of $s$.
+	Using $A$ and $\tau$, give the transfer function $G_{\omega}(s)$ in
+	terms of $s$.
 \end{question}
 
 \begin{solution}
+	Substituting for the values of $A$ and $\tau$ we found earlier, we
+	have:
 
+	\begin{align*}
+		G_{\omega} &= \frac{A}{\tau{s} + 1} \\
+		&= \frac{5}{.05{s} + 1}
+	\end{align*}
 \end{solution}
 
-%TODO: Complete
 \begin{question}
-	Complete problem 21(a) in Chapter 4 of Control Systems Engineering 8th ed:
+	Complete problem 21(a) in Chapter 4 of Control Systems Engineering 8th
+	ed:
 
 	For the unit step response shown, find the transfer
 	function of the system.
@@ -368,10 +377,32 @@
 \end{question}
 
 \begin{solution}
+	Since the graph provided represents the system's response to a unit
+	step output, we know that $\Delta{V} = 1$. Reading from the graph, we
+	can infer that the steady state of $\omega = 2$ and hence
+	$\Delta{\omega} = 2$. Hence, we know that:
 
+	\begin{gather*}
+		A = \frac{\Delta{\omega}}{\Delta{V}} = \frac{2}{1} \\
+	\end{gather*}
+
+	Once again, noting that the steady state of $\omega = 2$, we know that
+	$.632{\omega} = 1.264$. We therefore know that $\omega(\tau) = 1.264$.
+	Reading off the graph, we can therefore see that:
+
+	\begin{gather*}
+		\omega(\tau) = 1.264 \implies \\
+		\tau \approx 0.025 \\
+	\end{gather*}
+
+	Therefore:
+
+	\begin{align*}
+		G(s) &= \frac{A}{\tau{s} + 1} \\
+		&= \frac{2}{(0.025)s + 1}
+	\end{align*}
 \end{solution}
 
-%TODO: Complete
 \begin{question}
 	In one or two paragraphs, describe a situation in which it is
 	preferable to derive a transfer function experimentally, and then
@@ -382,39 +413,29 @@
 \end{question}
 
 \begin{solution}
+	Transfer functions might be easier to derive experimentally for a
+	number of different reasons. Deriving the transfer function of a
+	system experimentally involves testing the equipment over multiple
+	iterations and taking averages of the observed time constants and
+	calculated $A$ values and so, in the case the equipment isn't particularly
+	delicate or rough approximations of the transfer function are
+	acceptable, deriving it experimentally may likely save on time
+	compared to attempting to find it analytically. \\
 
+	On the other hand, if the equipment being worked with is delicate, a
+	more precise transfer function is needed, and there is enough time it
+	may be preferable to first find the transfer function mathematically.
+	Although mathematically finding and then experimentally verifying the
+	transfer function of a system may take longer, doing so provides a
+	reasonable baseline as t how the system will behave, greatly reducing
+	the possibility the equipment is damaged by attempting to find the
+	transfer function experimentally without a good baseline to work off.
+	As well, a mathematical expression (accounting for real-world factors
+	and assumptions) would likely also prove to be more accurate than what
+	could be determined, unless a very large number of experiments are
+	done. Therefore, if the system is particularly delicate, or a much more
+	precise expression for the transfer function is required, it is likely
+	preferable to attempt to derive it mathematically.
 \end{solution}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \end{document}
