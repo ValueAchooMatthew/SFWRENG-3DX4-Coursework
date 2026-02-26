@@ -1,0 +1,277 @@
+\documentclass[10pt]{article}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{soul}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.text}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xltabular}
+\usepackage{color}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{\thepage}
+\title{SFWRENG 3DX4 - Pre-lab 3}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{SFWRENG 3DX4 - Pre-lab 3}
+
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+
+\newcommand{\comment}[1]{\parbox[t]{0.45\textwidth}{\raggedright #1}}
+
+\setlength{\parindent}{0cm}
+
+\setcounter{tocdepth}{3}
+\hypersetup{bookmarksopen=true, bookmarksopenlevel=2, bookmarksdepth=3}
+
+\newcounter{question}
+\renewcommand{\thequestion}{\arabic{question}}
+
+\newenvironment{question}{
+	\refstepcounter{question}
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect{\large{Question \thequestion}}}
+	\vspace{1em}
+	\par
+	\large\textbf{Question \thequestion}
+	\vspace{.2cm}
+	\par
+	\setcounter{subquestion}{0}
+	\setcounter{step}{0}
+}{\vspace{.5em}}
+
+\newenvironment{solution}{
+	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+}{
+	\vspace{1em}
+	\newpage
+}
+
+\newcounter{subquestion}
+\renewcommand{\thesubquestion}{\alph{subquestion}}
+
+\newenvironment{subquestion}{
+	\refstepcounter{subquestion}
+	\phantomsection
+	\vspace{1em}\par\large\textbf{(\thesubquestion)}\hspace{-.5em}
+	\setcounter{step}{0}
+	\addcontentsline{toc}{subsection}{\protect{\large{Part \thequestion.\thesubquestion}}}
+}{
+	\par
+	\vspace{1em}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+}{
+	\par
+	\vspace{1.5em}
+}
+
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\fontsize{10pt}{14pt}\selectfont
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\begin{question}
+	The Root Mean Square (RMS) value of a signal $f(t)$ that is periodic with period
+	$T$ is given by the equation:
+
+	\begin{gather*}
+		\sqrt{\frac{1}{T}\int_{0}^{T}(f(t))^{2}dt} \\
+	\end{gather*}
+
+	RMS values are often easier to measure and more accurate than trying to determine peak amplitude.
+	It can be shown the RMS value of $u(t) = B\sin{(\omega{t})}$ is $\frac{B}{\sqrt{2}}$. \\
+
+	Find the RMS values of the following waveforms:
+\end{question}
+
+\begin{subquestion}
+	Square Wave
+\end{subquestion}
+
+\begin{solution}
+
+	In this case, we can see that our wave has a period of two, and hence $T = 2$. On the interval $[0, 2)$, we can therefore see that our signal $f(t)$ is given by:
+
+	\begin{align*}
+		f(t) &=
+		\begin{cases}
+			1, &0 \le t < 1 \\
+			0, &1 \le t < 2
+		\end{cases} \\
+	\end{align*}
+
+	Hence:
+
+	\begin{align*}
+		(f(t))^2 &=
+		\begin{cases}
+			1, &0 \le t < 1 \\
+			0, &1 \le t < 2
+		\end{cases}
+	\end{align*}
+
+	And so:
+
+	\begin{align*}
+		\int_{0}^{T}(f(t))^{2}dt &= \int_{0}^{1}(1)dt + \int_{1}^{2}(0)dt \\
+		&= 1 + 0 \\
+		&= 1 \\
+	\end{align*}
+
+	Thus, we have that the RMS of our wave is:
+
+	\begin{align*}
+		\sqrt{\frac{1}{T}\int_{0}^{T}(f(t))^{2}dt} &= \sqrt{\frac{1}{2}(1)} \\
+		&= \sqrt{\frac{1}{2}} \\
+		&= \frac{\sqrt{2}}{2} \\
+	\end{align*}
+\end{solution}
+
+\begin{subquestion}
+	Sawtooth Wave
+\end{subquestion}
+
+\begin{solution}
+	We can now observe that our wave has a period of 1. On the interval $[0, 1)$, we can see that our signal $f(t)$ is given by:
+
+	\begin{align*}
+		f(t) &=
+		\begin{cases}
+			t, &0 \le t < \frac{1}{2} \\
+			t - 1, &\frac{1}{2} \le t < 1
+		\end{cases} \\
+	\end{align*}
+
+	Hence:
+
+	\begin{align*}
+		(f(t))^2 &=
+		\begin{cases}
+			t^2, &0 \le t < \frac{1}{2} \\
+			(t - 1)^2, &\frac{1}{2} \le t < \frac{1}{2}
+		\end{cases} \\
+	\end{align*}
+
+	And so:
+
+	\begin{align*}
+		\int_{0}^{T}(f(t))^{2}dt &= \int_{0}^{\frac{1}{2}}t^2{dt} + \int_{\frac{1}{2}}^{1}(t - 1)^2{dt} \\
+		&= \int_{0}^{\frac{1}{2}}t^2{dt} + \int_{\frac{1}{2}}^{1}t^2 + 2t + 1{dt} \\
+		&= \frac{1}{3}t^3 \big{|}_{0}^{\frac{1}{2}} + \frac{1}{3}t^3\big{|}_{\frac{1}{2}}^{1} + t^2\big{|}_{\frac{1}{2}}^{1} + t\big{|}_{\frac{1}{2}}^{1} \\
+		&= \frac{1}{3}\left(\frac{1}{2}\right)^3 - 0 + \frac{1}{3}(1)^3 - \frac{1}{3}\left( \frac{1}{2} \right)^3 + (1)^2 - \left( \frac{1}{2} \right)^2 + 1 - \frac{1}{2} \\
+		&= \frac{1}{3} + 2 - \frac{1}{4} - \frac{1}{2} \\
+		&= \frac{19}{12}
+	\end{align*}
+
+	Thus, we have that the RMS of our wave is:
+
+	%NOTE: Sus
+	\begin{align*}
+		\sqrt{\frac{1}{T}\int_{0}^{T}(f(t))^{2}dt} &= \sqrt{\frac{1}{1}\frac{19}{12}} \\
+		&= \sqrt{\frac{19}{12}} \\
+		&= \sqrt{228}{12} \\
+		&= \sqrt{57}{6}
+	\end{align*}
+\end{solution}
+
+\begin{subquestion}
+	Sine Wave
+\end{subquestion}
+
+\begin{solution}
+	
+\end{solution}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
