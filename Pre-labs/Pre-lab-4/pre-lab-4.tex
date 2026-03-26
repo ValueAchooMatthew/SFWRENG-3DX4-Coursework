@@ -123,7 +123,7 @@
 \end{subquestion}
 
 \begin{solution}
-
+	A root locus plot depicts the closed-loop poles of a transfer function and the respective paths they take on the $s$-plane as the transfer function's gain (typically denoted $K$) varies from 0 to $\infty$. The root locus is used to find important properties of the transfer function, such as its stability and the gain required to critically damp the system.
 \end{solution}
 
 \begin{subquestion}
@@ -131,7 +131,7 @@
 \end{subquestion}
 
 \begin{solution}
-
+	The open-loop transfer function must be expressed in factored form in order to correctly identify the locations of all open-loop poles and zeros.
 \end{solution}
 
 \begin{subquestion}
@@ -139,7 +139,7 @@
 \end{subquestion}
 
 \begin{solution}
-
+	The gain $K$ dictates many properties of the system, including its rise time and percent overshoot. Typically, higher values of $K$ lead to faster rise times, but may introduce or worsen the system's percent overshoot and vice versa. The optimal value of $K$ is dependent on the intended application of the system.
 \end{solution}
 
 \begin{subquestion}
@@ -147,19 +147,39 @@
 \end{subquestion}
 
 \begin{solution}
-
+	Root locus plots can be used to design controllers by indicating what gain $K$ will impart the system with certain desired properties. For example, if a designer wishes for the system they're working on to be critically damped, the paths traced by the closed-loop poles on the system's associated root locus plot can be used to identify what value they should set $K$ to ensure that is the case.
 \end{solution}
 
 \begin{subquestion}
-	Image that we have a partially finished root locus plot where only the pole and zero locations have been plotted. What are the rules for completing the root locus plot using pencil-and-paper? (Hint! Your textbook has this information!)
+	Imagine that we have a partially finished root locus plot where only the pole and zero locations have been plotted. What are the rules for completing the root locus plot using pencil-and-paper? (Hint! Your textbook has this information!)
 \end{subquestion}
 
 \begin{solution}
+	As stated in the textbook, we could do the following to complete the root locus plot:
+	\begin{enumerate}
+		\item Determine the number of branches to draw. This equals the number of open-loop poles, $n$. Each branch starts at a pole and ends at a zero (or at infinity if there are fewer zeros than poles).
+		\item Shade in the real-axis segments where the root locus exists. The locus lies on all portions of the real axis that are to the left of an odd total number of real-axis poles and zeros.
+		\item If there are more poles than zeros ($n > m$), draw the asymptotes that the $n - m$ branches going to infinity will follow. The asymptote angles are:
 
+		\begin{align*}
+			\theta_a &= \frac{(2q + 1) \cdot 180^\circ}{n - m}, \quad q = 0, 1, \ldots, n - m - 1.
+		\end{align*}
+
+		And they all radiate from a single point on the real axis, given by:
+
+		\begin{align*}
+			\sigma_a &= \frac{\sum \text{finite poles} - \sum \text{finite zeros}}{n - m}.
+		\end{align*}
+
+		\item Find and mark any breakaway or break-in points on the real axis by solving $\dfrac{dK}{ds} = 0$. These are the points where branches leave or arrive at the real axis.
+		\item If the root locus appears to cross the $j\omega$-axis, find the crossing points and mark these on the plot.
+		\item If there are complex poles or zeros, compute the departure angles (from the complex poles) and arrival angles (at the complex zeros) using the angle condition, and draw the branches leaving or arriving at the appropriate angles.
+		\item Connect all the pieces together, keeping in mind that the plot must be symmetric about the real axis. The completed curves should smoothly connect the starting points, breakaway/break-in points, $j\omega$-crossings, and asymptotes.
+	\end{enumerate}
 \end{solution}
 
 \begin{question}
-	For each of the following transfer functions, sketch a root locus plot using the pencil-and-paper method you outlined above. \emph{WARNING:} Sketch root locus plots can be counter-intuitive! Follow the steps carefully!
+	For each of the following transfer functions, sketch a root locus plot using the pencil-and-paper method you outlined above. \emph{WARNING:} Sketching root locus plots can be counter-intuitive! Follow the steps carefully!
 \end{question}
 
 \begin{subquestion}
@@ -169,7 +189,7 @@
 \end{subquestion}
 
 \begin{solution}
-
+	\emph{Responses attached at the end of the page}
 \end{solution}
 
 \begin{subquestion}
@@ -191,44 +211,5 @@
 \begin{solution}
 
 \end{solution}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 \end{document}
