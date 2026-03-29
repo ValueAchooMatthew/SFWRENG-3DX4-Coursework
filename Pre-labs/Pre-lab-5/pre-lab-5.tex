@@ -1,0 +1,301 @@
+\documentclass[10pt]{article}
+\usepackage{braket}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{soul}
+\usepackage{float}
+\usepackage{tabularx}
+\usepackage{mathtools}
+\usepackage{amsmath, amssymb, amsthm}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usetikzlibrary{decorations.text}
+\usepackage{enumitem}
+\usepackage{geometry}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{xltabular}
+\usepackage{color}
+\usepackage{hyperref}
+\geometry{margin=1in}
+
+\pagestyle{fancy}
+\fancyhf{}
+\cfoot{\thepage}
+\title{SFWRENG 3DX4 - Pre-lab 5}
+\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\date{\today}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[R]{SFWRENG 3DX4 - Pre-lab 5}
+
+\AtBeginEnvironment{align}{\setcounter{equation}{0}}
+
+\newcommand{\comment}[1]{\parbox[t]{0.45\textwidth}{\raggedright #1}}
+
+\setlength{\parindent}{0cm}
+
+\setcounter{tocdepth}{3}
+\hypersetup{bookmarksopen=true, bookmarksopenlevel=2, bookmarksdepth=3}
+
+\newcounter{question}
+\renewcommand{\thequestion}{\arabic{question}}
+
+\newenvironment{question}{
+	\refstepcounter{question}
+	\phantomsection
+	\addcontentsline{toc}{section}{\protect{\large{Question \thequestion}}}
+	\vspace{1em}
+	\par
+	\large\textbf{Question \thequestion}
+	\vspace{.2cm}
+	\par
+	\setcounter{subquestion}{0}
+	\setcounter{step}{0}
+}{\vspace{.5em}}
+
+\newenvironment{solution}{
+	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+}{
+	\vspace{1em}
+	\newpage
+}
+
+\newcounter{subquestion}
+\renewcommand{\thesubquestion}{\alph{subquestion}}
+
+\newenvironment{subquestion}{
+	\refstepcounter{subquestion}
+	\phantomsection
+	\vspace{1em}\par\large\textbf{(\thesubquestion)}\hspace{-.5em}
+	\setcounter{step}{0}
+	\addcontentsline{toc}{subsection}{\protect{\large{Part \thequestion.\thesubquestion}}}
+}{
+	\par
+	\vspace{1em}
+}
+
+\makeatother
+
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+}{
+	\par
+	\vspace{1.5em}
+}
+
+\makeatother
+
+\newcolumntype{Y}{>{\centering\arraybackslash}X}
+\renewcommand{\arraystretch}{1.8}
+
+\fontsize{10pt}{14pt}\selectfont
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+\newpage
+
+\begin{question}
+	In Lab 4, we used a PD compensator to control our ball and beam apparatus.
+	The transfer function of our PD compensator was as follows:
+
+	\begin{gather*}
+		G_{c}(s) = \left( K_{D}s + K_{P} \right) \\
+	\end{gather*}
+
+	However, we did not use the compensator in this form. The transfer function
+	we used in lab was as follows:
+
+	\begin{gather*}
+		G_{c}(s) = K_{C}\left(s + z \right) \\
+	\end{gather*}
+
+	Solve for $K_C$ and $z$ in terms of $K_D$ and $K_P$.
+\end{question}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{question}
+	Given that the transfer function of our Ball and Beam plant used in the previous
+	lab is:
+
+	\begin{gather*}
+		G(s) = \frac{0.419}{s^2} \\
+	\end{gather*}
+
+	And given that the controller is applied to the plant in cascade configuration,
+	find: \\
+\end{question}
+
+\begin{subquestion}
+	Static error constant for position (position constant).
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for velocity (velocity constant).
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for acceleration (acceleration constant).
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for step input $u(t)$.
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for ramp input $tu(t)$.
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for parabolic input $t^2u(t)$.
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{question}
+	In Lab 5, we will be augmenting our controller to include an integrator. The
+	transfer function of our new PID compensator will be as follows:
+
+	\begin{gather*}
+		G_{c}(s) = \left(K_{D}s + K_{P} + K_{I}s \right) \\
+	\end{gather*}
+
+	Given that the transfer function for our plant has not changed, and given that
+	this controller is also applied to the plant in cascade configuration, find:
+\end{question}
+
+\begin{subquestion}
+	Static error constant for position (position constant).
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for velocity (velocity constant).
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for acceleration (acceleration constant).
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for step input $u(t)$.
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for ramp input $tu(t)$.
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{subquestion}
+	Static error constant for parabolic input $t^2u(t)$.
+\end{subquestion}
+
+\begin{solution}
+
+\end{solution}
+
+\begin{question}
+	Consider the block diagram shown below where $D(s)$ is a step disturbance input. \\
+
+	%TODO: Add block diagram.
+
+	Ideally you want your controller design to reject a step disturbance input at
+	$D(s)$. This means that in the steady state for $D(s) = \frac{1}{s}$, the value of $Y(s)$ is
+	unchanged.
+\end{question}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\end{document}
