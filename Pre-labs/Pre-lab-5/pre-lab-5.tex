@@ -1,30 +1,49 @@
 \documentclass[10pt]{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{soul}
-\usepackage{float}
 \usepackage{tabularx}
-\usepackage{mathtools}
-\usepackage{amsmath, amssymb, amsthm}
 \usepackage{tikz}
 \usetikzlibrary{arrows}
 \usetikzlibrary{decorations.text}
 \usepackage{enumitem}
-\usepackage{geometry}
-\usepackage{fancyhdr}
 \usepackage{titlesec}
 \usepackage{xltabular}
 \usepackage{color}
-\usepackage{hyperref}
-\geometry{margin=1in}
 
-\pagestyle{fancy}
-\fancyhf{}
-\cfoot{\thepage}
-\title{SFWRENG 3DX4 - Pre-lab 5}
-\author{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
-\date{\today}
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge SFWRENG 3DX4} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Pre-lab 5}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+}
 
 \hypersetup{
 	colorlinks=true,
@@ -36,12 +55,10 @@
 }
 
 \fancyhead{}
-\fancyhead[L]{Matthew Farah, \href{mailto:farahm11@mcmaster.ca}{$\langle$farahm11@mcmaster.ca$\rangle$}, 400468251}
+\fancyhead[L]{\today}
 \fancyhead[R]{SFWRENG 3DX4 - Pre-lab 5}
 
 \AtBeginEnvironment{align}{\setcounter{equation}{0}}
-
-\newcommand{\comment}[1]{\parbox[t]{0.45\textwidth}{\raggedright #1}}
 
 \setlength{\parindent}{0cm}
 
@@ -54,20 +71,28 @@
 \newenvironment{question}{
 	\refstepcounter{question}
 	\phantomsection
-	\addcontentsline{toc}{section}{\protect{\large{Question \thequestion}}}
+	\addcontentsline{toc}{section}{\protect{Question \thequestion}}
 	\vspace{1em}
 	\par
-	\large\textbf{Question \thequestion}
-	\vspace{.2cm}
-	\par
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{Question \thequestion:}
+	\ignorespaces
 	\setcounter{subquestion}{0}
-	\setcounter{step}{0}
-}{\vspace{.5em}}
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
 
 \newenvironment{solution}{
-	\vspace{1em}\par\large\textbf{{Solution:}}\par\vspace{1em}
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
 }{
 	\vspace{1em}
+	\end{adjustwidth}
 	\newpage
 }
 
@@ -77,16 +102,19 @@
 \newenvironment{subquestion}{
 	\refstepcounter{subquestion}
 	\phantomsection
-	\vspace{1em}\par\large\textbf{(\thesubquestion)}\hspace{-.5em}
+	\addcontentsline{toc}{subsection}{\protect{Part \thequestion.\thesubquestion}}
 	\setcounter{step}{0}
-	\addcontentsline{toc}{subsection}{\protect{\large{Part \thequestion.\thesubquestion}}}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubquestion)}
+	\ignorespaces
 }{
 	\par
 	\vspace{1em}
+	\end{adjustwidth}
 }
 
 \makeatother
-
 \makeatletter
 
 \newcounter{step}
@@ -94,13 +122,16 @@
 
 \newenvironment{step}{
 	\refstepcounter{step}
-	\vspace{1.5em}\par\noindent\large\textbf{(\thestep)}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
 }{
 	\par
-	\vspace{1.5em}
 }
 
-\makeatother
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
 
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 \renewcommand{\arraystretch}{1.8}
@@ -110,6 +141,7 @@
 \begin{document}
 
 \maketitle
+\pagestyle{fancy}
 
 \tableofcontents
 \newpage
@@ -133,7 +165,25 @@
 \end{question}
 
 \begin{solution}
+	Expanding the second form, we have:
 
+	\begin{align*}
+		G_{c}(s) &= K_{C}(s + z) \\
+		&= K_{C}s + K_{C}z \\
+	\end{align*}
+
+	Equating this with the first form:
+
+	\begin{gather*}
+		K_{D}s + K_{P} = K_{C}s + K_{C}z \\
+	\end{gather*}
+
+	By equating coefficients, we can see that:
+
+	\begin{align*}
+		K_{C} &= K_{D} \\
+		K_{C}z &= K_{P} \implies z = \frac{K_{P}}{K_{C}} = \frac{K_{P}}{K_{D}} \\
+	\end{align*}
 \end{solution}
 
 \begin{question}
@@ -153,7 +203,21 @@
 \end{subquestion}
 
 \begin{solution}
+	Since the controller is applied in cascade, the open-loop transfer function is:
 
+	\begin{align*}
+		G_{OL}(s) &= G_{c}(s) \cdot G(s) \\
+		&= K_{C}(s + z) \cdot \frac{0.419}{s^{2}} \\
+		&= \frac{0.419K_{C}(s + z)}{s^{2}} \\
+	\end{align*}
+
+	We can observe that the open-loop transfer function has two poles at the origin, so this is a Type 2 system. The position constant is therefore given by:
+
+	\begin{align*}
+		K_{p} &= \lim_{s \to 0} G_{OL}(s) \\
+		&= \lim_{s \to 0} \frac{0.419K_{C}(s + z)}{s^{2}} \\
+		&= \infty \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
@@ -161,7 +225,13 @@
 \end{subquestion}
 
 \begin{solution}
+	Using $G_{OL}(s)$ as found in 2.a.), the velocity constant is given by:
 
+	\begin{align*}
+		K_{v} &= \lim_{s \to 0} sG_{OL}(s) \\
+		&= \lim_{s \to 0} \frac{0.419K_{C}(s + z)}{s} \\
+		&= \infty \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
@@ -169,31 +239,54 @@
 \end{subquestion}
 
 \begin{solution}
+	Using $G_{OL}(s)$ as found in 2.a.), the acceleration constant is given by:
 
+	\begin{align*}
+		K_{a} &= \lim_{s \to 0} s^{2}G_{OL}(s) \\
+		&= \lim_{s \to 0} 0.419K_{C}(s + z) \\
+		&= 0.419K_{C}z \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
-	Static error constant for step input $u(t)$.
+	Steady state error for a step input $u(t)$.
 \end{subquestion}
 
 \begin{solution}
+	Since $K_{p} = \infty$, the steady state error for a step input is:
 
+	\begin{align*}
+		e_{ss} &= \frac{1}{1 + K_{p}} \\
+		&= \frac{1}{1 + \infty} \\
+		&= 0 \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
-	Static error constant for ramp input $tu(t)$.
+	Steady state error for a ramp input $tu(t)$.
 \end{subquestion}
 
 \begin{solution}
+	Since $K_{v} = \infty$, the steady state error for a ramp input is:
 
+	\begin{align*}
+		e_{ss} &= \frac{1}{K_{v}} \\
+		&= \frac{1}{\infty} \\
+		&= 0 \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
-	Static error constant for parabolic input $t^2u(t)$.
+	Steady state error for a parabolic input $t^2u(t)$.
 \end{subquestion}
 
 \begin{solution}
+	Since $K_{a} = 0.419K_{C}z$, the steady state error for a parabolic input is:
 
+	\begin{align*}
+		e_{ss} &= \frac{1}{K_{a}} \\
+		&= \frac{1}{0.419K_{C}z} \\
+	\end{align*}
 \end{solution}
 
 \begin{question}
@@ -201,7 +294,7 @@
 	transfer function of our new PID compensator will be as follows:
 
 	\begin{gather*}
-		G_{c}(s) = \left(K_{D}s + K_{P} + K_{I}s \right) \\
+		G_{c}(s) = \left(K_{D}s + K_{P} + \frac{K_{I}}{s} \right) \\
 	\end{gather*}
 
 	Given that the transfer function for our plant has not changed, and given that
@@ -213,7 +306,27 @@
 \end{subquestion}
 
 \begin{solution}
+	We can rewrite the PID compensator over a common denominator as:
 
+	\begin{align*}
+		G_{c}(s) &= \frac{K_{D}s^{2} + K_{P}s + K_{I}}{s} \\
+	\end{align*}
+
+	And so the open-loop transfer function is:
+
+	\begin{align*}
+		G_{OL}(s) &= G_{c}(s) \cdot G(s) \\
+		&= \frac{K_{D}s^{2} + K_{P}s + K_{I}}{s} \cdot \frac{0.419}{s^{2}} \\
+		&= \frac{0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s^{3}} \\
+	\end{align*}
+
+	We can observe that the open-loop transfer function now has three poles at the origin, so this is a Type 3 system. The position constant is therefore given by:
+
+	\begin{align*}
+		K_{p} &= \lim_{s \to 0} G_{OL}(s) \\
+		&= \lim_{s \to 0} \frac{0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s^{3}} \\
+		&= \infty \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
@@ -221,7 +334,13 @@
 \end{subquestion}
 
 \begin{solution}
+	Using $G_{OL}(s)$ as found in 3.a.), the velocity constant is given by:
 
+	\begin{align*}
+		K_{v} &= \lim_{s \to 0} sG_{OL}(s) \\
+		&= \lim_{s \to 0} \frac{0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s^{2}} \\
+		&= \infty \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
@@ -229,73 +348,190 @@
 \end{subquestion}
 
 \begin{solution}
+	Using $G_{OL}(s)$ as found in 3.a.), the acceleration constant is given by:
 
+	\begin{align*}
+		K_{a} &= \lim_{s \to 0} s^{2}G_{OL}(s) \\
+		&= \lim_{s \to 0} \frac{0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s} \\
+		&= \infty \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
-	Static error constant for step input $u(t)$.
+	Steady state error for a step input $u(t)$.
 \end{subquestion}
 
 \begin{solution}
+	Since $K_{p} = \infty$, the steady state error for a step input is:
 
+	\begin{align*}
+		e_{ss} &= \frac{1}{1 + K_{p}} \\
+		&= \frac{1}{1 + \infty} \\
+		&= 0 \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
-	Static error constant for ramp input $tu(t)$.
+	Steady state error for a ramp input $tu(t)$.
 \end{subquestion}
 
 \begin{solution}
+	Since $K_{v} = \infty$, the steady state error for a ramp input is:
 
+	\begin{align*}
+		e_{ss} &= \frac{1}{K_{v}} \\
+		&= \frac{1}{\infty} \\
+		&= 0 \\
+	\end{align*}
 \end{solution}
 
 \begin{subquestion}
-	Static error constant for parabolic input $t^2u(t)$.
+	Steady state error for a parabolic input $t^2u(t)$.
 \end{subquestion}
 
 \begin{solution}
+	Since $K_{a} = \infty$, the steady state error for a parabolic input is:
 
+	\begin{align*}
+		e_{ss} &= \frac{1}{K_{a}} \\
+		&= \frac{1}{\infty} \\
+		&= 0 \\
+	\end{align*}
+
+	We can therefore see that the addition of the integrator term $\frac{K_{I}}{s}$ to the controller has increased the system type from 2 to 3, eliminating the steady state error for parabolic inputs that was present with the PD compensator alone.
 \end{solution}
 
 \begin{question}
-	Consider the block diagram shown below where $D(s)$ is a step disturbance input. \\
+	Consider the block diagram shown below where $D(s)$ is a step disturbance input.
 
-	%TODO: Add block diagram.
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{./Imgs/Question-4.png}
+		\caption{Block diagram with disturbance input $D(s)$.}
+	\end{figure}
 
 	Ideally you want your controller design to reject a step disturbance input at
 	$D(s)$. This means that in the steady state for $D(s) = \frac{1}{s}$, the value of $Y(s)$ is
 	unchanged.
 \end{question}
 
+\begin{subquestion}
+	Ignoring the input $R(s)$, what is the transfer function $\frac{E(s)}{D(s)}$ in terms of
+	$G_1(s)$ and $G_2(s)$?
+\end{subquestion}
 
+\begin{solution}
+	Setting $R(s) = 0$, we have that $E(s) = -C(s)$. From the block diagram, the output $C(s)$ is given by:
 
+	\begin{gather*}
+		C(s) = G_{2}(s)\left[G_{1}(s)E(s) + D(s)\right] \\
+	\end{gather*}
 
+	Substituting $E(s) = -C(s)$:
 
+	\begin{align*}
+		-E(s) &= G_{2}(s)\left[G_{1}(s)E(s) + D(s)\right] \\
+		-E(s) &= G_{1}(s)G_{2}(s)E(s) + G_{2}(s)D(s) \\
+		-E(s) - G_{1}(s)G_{2}(s)E(s) &= G_{2}(s)D(s) \\
+		E(s)\left[-1 - G_{1}(s)G_{2}(s)\right] &= G_{2}(s)D(s) \\
+	\end{align*}
 
+	And so:
 
+	\begin{align*}
+		\frac{E(s)}{D(s)} &= \frac{G_{2}(s)}{-1 - G_{1}(s)G_{2}(s)} \\
+		&= \frac{-G_{2}(s)}{1 + G_{1}(s)G_{2}(s)} \\
+	\end{align*}
+\end{solution}
 
+\begin{subquestion}
+	For $G_1(s) = K_C(s + z)$ and $G_2(s) = \frac{0.419}{s^2}$, what is the steady state error
+	resulting from step inputs $R(s) = \frac{A}{s}$ and $D(s) = \frac{B}{s}$?
+\end{subquestion}
 
+\begin{solution}
+	Since the system is linear, we can compute the steady state error due to $R(s)$ and $D(s)$ separately and then sum them. \\
 
+	We know that for a unity feedback system, the transfer function from $R(s)$ to $E(s)$ is:
 
+	\begin{gather*}
+		\frac{E(s)}{R(s)} = \frac{1}{1 + G_{1}(s)G_{2}(s)} \\
+	\end{gather*}
 
+	As computed in Question 2, the open-loop transfer function $G_{1}(s)G_{2}(s) = \frac{0.419K_{C}(s + z)}{s^{2}}$ is Type 2. The steady state error due to a step input $R(s) = \frac{A}{s}$ for a Type 2 system is therefore:
 
+	\begin{align*}
+		e_{ss,R} &= \frac{A}{1 + K_{p}} \\
+		&= \frac{A}{1 + \infty} \\
+		&= 0 \\
+	\end{align*}
 
+	Now, using the result from 4.a.), the steady state error due to $D(s) = \frac{B}{s}$ is given by the final value theorem:
 
+	\begin{align*}
+		e_{ss,D} &= \lim_{s \to 0} sE_{D}(s) \\
+		&= \lim_{s \to 0} s \cdot \frac{-G_{2}(s)}{1 + G_{1}(s)G_{2}(s)} \cdot \frac{B}{s} \\
+		&= \lim_{s \to 0} \frac{-G_{2}(s)B}{1 + G_{1}(s)G_{2}(s)} \\
+		&= \lim_{s \to 0} \frac{\frac{-0.419B}{s^{2}}}{1 + \frac{0.419K_{C}(s + z)}{s^{2}}} \\
+		&= \lim_{s \to 0} \frac{\frac{-0.419B}{s^{2}}}{\frac{s^{2} + 0.419K_{C}(s + z)}{s^{2}}} \\
+		&= \lim_{s \to 0} \frac{-0.419B}{s^{2} + 0.419K_{C}s + 0.419K_{C}z} \\
+		&= \frac{-0.419B}{0.419K_{C}z} \\
+		&= \frac{-B}{K_{C}z} \\
+	\end{align*}
 
+	Therefore, the total steady state error is:
 
+	\begin{align*}
+		e_{ss} &= e_{ss,R} + e_{ss,D} \\
+		&= 0 + \frac{-B}{K_{C}z} \\
+		&= \frac{-B}{K_{C}z} \\
+	\end{align*}
 
+	We can see that the PD compensator does not reject the step disturbance, as the steady state error due to $D(s)$ is non-zero.
+\end{solution}
 
+\begin{subquestion}
+	For $G_1(s) = \left(K_Ds + K_P + \frac{K_I}{s}\right)$ and $G_2(s) = \frac{0.419}{s^2}$, what is the steady state
+	error resulting from step inputs $R(s) = \frac{A}{s}$ and $D(s) = \frac{B}{s}$?
 
+	\textit{Hint: It's a linear system so you can consider the steady state error resulting
+	from $R(s)$ and the steady state error resulting from $D(s)$ separately and then
+	sum them!}
+\end{subquestion}
 
+\begin{solution}
+	Once again, since the system is linear, we consider the contributions from $R(s)$ and $D(s)$ separately. \\
 
+	As computed in Question 3, the open-loop transfer function is now $G_{1}(s)G_{2}(s) = \frac{0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s^{3}}$, which is Type 3. The steady state error due to a step input $R(s) = \frac{A}{s}$ for a Type 3 system is therefore:
 
+	\begin{align*}
+		e_{ss,R} &= \frac{A}{1 + K_{p}} \\
+		&= \frac{A}{1 + \infty} \\
+		&= 0 \\
+	\end{align*}
 
+	Now, using the result from 4.a.), the steady state error due to $D(s) = \frac{B}{s}$ is:
 
+	\begin{align*}
+		e_{ss,D} &= \lim_{s \to 0} sE_{D}(s) \\
+		&= \lim_{s \to 0} s \cdot \frac{-G_{2}(s)}{1 + G_{1}(s)G_{2}(s)} \cdot \frac{B}{s} \\
+		&= \lim_{s \to 0} \frac{-G_{2}(s)B}{1 + G_{1}(s)G_{2}(s)} \\
+		&= \lim_{s \to 0} \frac{\frac{-0.419B}{s^{2}}}{1 + \frac{0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s^{3}}} \\
+		&= \lim_{s \to 0} \frac{\frac{-0.419B}{s^{2}}}{\frac{s^{3} + 0.419(K_{D}s^{2} + K_{P}s + K_{I})}{s^{3}}} \\
+		&= \lim_{s \to 0} \frac{-0.419Bs}{s^{3} + 0.419K_{D}s^{2} + 0.419K_{P}s + 0.419K_{I}} \\
+		&= \frac{0}{0.419K_{I}} \\
+		&= 0 \\
+	\end{align*}
 
+	Therefore, the total steady state error is:
 
+	\begin{align*}
+		e_{ss} &= e_{ss,R} + e_{ss,D} \\
+		&= 0 + 0 \\
+		&= 0 \\
+	\end{align*}
 
-
-
-
-
+	We can therefore see that the PID compensator successfully rejects the step disturbance input, unlike the PD compensator from 4.b.). This is because the addition of the integrator term $\frac{K_{I}}{s}$ increases the system type, driving the disturbance error to zero in steady state.
+\end{solution}
 
 \end{document}
