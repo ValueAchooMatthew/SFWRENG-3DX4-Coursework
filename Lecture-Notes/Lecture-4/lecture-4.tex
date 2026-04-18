@@ -1,0 +1,238 @@
+\ifdefined\iscombined
+	\lecturetitle{Irreducible Quadratics and Stability}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 4} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Irreducible Quadratics and Stability}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 4 - Irreducible Quadratics and Stability}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item Note: the midterm will have a physical modelling question for mechanical and electrical systems.
+	\item A pole is a value of $s$ which makes the denominator of a transfer function zero.
+	\begin{itemize}
+		\item A pole is said to be `unstable' if its real component is greater than zero, and `semi-stable' if its real component equals zero.
+	\end{itemize}
+	\item A quadratic is said to be `irreducible' if its roots are complex numbers with non-zero imaginary components.
+\end{itemize}
+
+\begin{example}
+	Compute $y(t)$ where $Y(s) = \frac{3}{s(s^2 + 2s + 5)}$.
+\end{example}
+
+\begin{solution}
+	Note that $Y(s)$ has an irreducible quadratic in the denominator. As earlier, to compute $y(t)$, we must decompose $Y(s)$.
+
+	\begin{step}
+		Decompose $Y(s)$.
+	\end{step}
+
+	\begin{align*}
+		\frac{3}{s(s^2 + 2s + 5)} &= \frac{A}{s} + \frac{Bs + C}{s^2 + 2s + 5} \\
+	\end{align*}
+
+	We therefore have that:
+
+	\begin{align*}
+		3 &= A(s^2 + 2s + 5) + (Bs + C)(s) \\
+		3 &= As^2 + 2As + 5A + Bs^2 + Cs \\
+	\end{align*}
+
+	Thus, by equating coefficients, we have:
+
+	\begin{align*}
+		5A &= 3 \Rightarrow A = \tfrac{3}{5} \\
+		As^2 + Bs^2 &= 0 \Rightarrow Bs^2 = -\tfrac{3}{5}s^2 \Rightarrow B = -\tfrac{3}{5} \\
+		2As + Cs &= 0 \Rightarrow Cs = -\tfrac{6}{5}s \Rightarrow C = -\tfrac{6}{5} \\
+	\end{align*}
+
+	Therefore:
+
+	\begin{align*}
+		Y(s) &= \frac{3}{5s} + \frac{-3s - 6}{5(s^2 + 2s + 5)} \\
+	\end{align*}
+
+	\begin{step}
+		Compute $y(t)$.
+	\end{step}
+
+	We know that:
+
+	\begin{align*}
+		y(t) &= \mathcal{L}^{-1}\{Y(s)\} \\
+			&= \mathcal{L}^{-1} \left\{ \frac{3}{5s} - \frac{3s + 6}{5(s^2 + 2s + 5)} \right\} \\
+			&= \frac{3}{5} \mathcal{L}^{-1} \left\{ \frac{1}{s} \right\} - \frac{3}{5} \mathcal{L}^{-1} \left\{ \frac{s + 2}{s^2 + 2s + 5} \right\} \\
+	\end{align*}
+
+	$\mathcal{L}^{-1} \left\{ \frac{1}{s} \right\}$ is easy enough to find, but what about $\mathcal{L}^{-1} \left\{ \frac{s + 2}{s^2 + 2s + 5} \right\}$? Well, through some clever algebra, observe that:
+
+	\begin{align*}
+		\frac{s + 2}{s^2 + 2s + 5} &= \frac{s + 2}{s^2 + 2s + 1 + 4} \\
+			&= \frac{s + 2}{(s + 1)^2 + 4} \\
+			&= \frac{s + 1 + 1}{(s + 1)^2 + 2^2} \\
+			&= \frac{s + 1}{(s + 1)^2 + 2^2} + \frac{1}{(s + 1)^2 + 2^2} \\
+			&= \frac{s + 1}{(s + 1)^2 + 2^2} + \frac{1}{2} \left( \frac{2}{(s + 1)^2 + 2^2} \right) \\
+	\end{align*}
+
+	Now, note that $\mathcal{L}\{e^{-at}\cos(\omega t)\} = \frac{s + a}{(s + a)^2 + \omega^2}$ and $\mathcal{L}\{e^{-at}\sin(\omega t)\} = \frac{\omega}{(s + a)^2 + \omega^2}$. This is an awful lot like what we found earlier! Thus:
+
+	\begin{align*}
+		y(t) &= \frac{3}{5} \mathcal{L}^{-1} \left\{ \frac{1}{s} \right\} - \frac{3}{5} \mathcal{L}^{-1} \left\{ \frac{s + 1}{(s + 1)^2 + 2^2} \right\} - \frac{3}{10} \mathcal{L}^{-1} \left\{ \frac{2}{(s + 1)^2 + 2^2} \right\} \\
+			&= \frac{3}{5} u(t) - \frac{3}{5} e^{-t} \cos(2t) - \frac{3}{10} e^{-t} \sin(2t)
+	\end{align*}
+\end{solution}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
