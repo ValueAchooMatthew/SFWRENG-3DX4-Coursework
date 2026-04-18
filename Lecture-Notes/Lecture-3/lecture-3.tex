@@ -1,0 +1,238 @@
+\ifdefined\iscombined
+	\lecturetitle{Partial Fraction Decomposition}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 3} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Partial Fraction Decomposition}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 3 - Partial Fraction Decomposition}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item The inverse Laplace transform takes functions expressed in the $s$-domain to the time-domain.
+	\item A rational function is said to be proper if the degree of its numerator is less than or equal to the degree of its denominator.
+	\item Partial fraction decomposition is a common technique used to express a transfer function whose inverse Laplace transform is unknown into the sum of fractions whose inverse Laplace transform is known.
+	\begin{itemize}
+		\item Partial fraction decomposition can only be performed on proper fractions.
+	\end{itemize}
+	\item Convolution in the time domain corresponds to multiplication in the Laplace domain and vice versa.
+\end{itemize}
+
+\begin{example}
+	Perform partial fraction decomposition on $\frac{1}{s(s+2)}$.
+\end{example}
+
+\begin{solution}
+	We can express that:
+
+	\begin{align*}
+		\frac{1}{s(s+2)} &= \frac{A}{s} + \frac{B}{s+2} \\
+	\end{align*}
+
+	Where $A, B \in \mathbb{R}$. Now, we can see that:
+
+	\begin{align*}
+		1 &= A(s+2) + B(s) \\
+	\end{align*}
+
+	By multiplying both sides of the equality by $s(s+2)$. Therefore:
+
+	\begin{align*}
+		1 &= As + 2A + Bs
+	\end{align*}
+
+	By equating coefficients, we have that:
+
+	\begin{align*}
+		2A &= 1 \Rightarrow A = \tfrac{1}{2} \\
+		As + Bs &= 0 \Rightarrow Bs = -\tfrac{1}{2}s \Rightarrow B = -\tfrac{1}{2} \\
+	\end{align*}
+
+	Therefore:
+
+	\begin{align*}
+		\frac{1}{s(s+2)} &= \frac{1}{2s} - \frac{1}{2(s+2)}
+	\end{align*}
+\end{solution}
+
+\begin{example}
+	If $Y(s) = \frac{1}{s(s+2)^2(s+1)}$, find $y(t)$.
+\end{example}
+
+\begin{solution}
+	To find $y(t)$, we must find the partial fraction decomposition of $Y(s)$ to compute its inverse Laplace transform. We have that:
+
+	\begin{align*}
+		Y(s) &= \frac{1}{s(s+2)^2(s+1)} = \frac{A}{s} + \frac{B}{s+2} + \frac{C}{(s+2)^2} + \frac{D}{s+1} \\
+	\end{align*}
+
+	Now, we can see that:
+
+	\begin{align*}
+		A &= sY(s) \Big|_{s=0} = \frac{1}{(s+2)^2(s+1)} \Big|_{s=0} = \frac{1}{(2)(1)} = \frac{1}{2} \\
+		C &= (s+2)^2 Y(s) \Big|_{s=-2} = \frac{1}{s(s+1)} \Big|_{s=-2} = \frac{1}{(-2)(-2+1)} = \frac{1}{2} \\
+		D &= (s+1)Y(s) \Big|_{s=-1} = \frac{1}{s(s+2)^2} \Big|_{s=-1} = \frac{1}{(-1)(-1+2)^2} = -1 \\
+	\end{align*}
+
+	Finding $B$, however, requires (by the product rule) that we find: %FIX: Needs fixing
+
+	\begin{align*}
+		B &= (s+2)^2 \tfrac{d}{ds} Y(s) \Big|_{s=-2} = \tfrac{d}{ds} \left( \frac{1}{s(s+1)} \right) \Big|_{s=-2} = \frac{1}{(s(s+1))^2} \Big|_{s=-2} \\
+	\end{align*}
+
+	\emph{Note to self: Come back and finish this.}
+\end{solution}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
