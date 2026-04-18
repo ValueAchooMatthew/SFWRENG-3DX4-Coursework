@@ -1,0 +1,236 @@
+\ifdefined\iscombined
+	\lecturetitle{Compensators and Laplace Transforms}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 2} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Compensators and Laplace Transforms}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 2 - Compensators and Laplace Transforms}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item A compensator is a sub-system used to improve a control system's stability, performance, and/or accuracy.
+	\item A plant describes the relationship between a control system's input and output.
+	\item Plants employ one or more of the following techniques to minimize the steady state error of a control system:
+	\begin{enumerate}
+		\item Proportional control systems.
+		\begin{itemize}
+			\item Proportional control systems are compensators which directly feed a signal corresponding to the control system's error back to the system, multiplied by some proportionality constant called its gain.
+		\end{itemize}
+		\item Integral control systems.
+		\begin{itemize}
+			\item Integral control systems integrate over the control system's error signal and feed that back to the system, giving the system a way to account for the error accumulated over time.
+		\end{itemize}
+		\item Derivative control systems.
+		\begin{itemize}
+			\item Derivative control systems differentiate the control system's error signal and feed that back to the system, giving the system a way to account for how the steady state error is projected to change over time.
+		\end{itemize}
+	\end{enumerate}
+	\item Systems which incorporate all three techniques are called `PID' systems.
+	\item Control systems are approximated to work linearly, but due to things like friction, do not behave perfectly linear in reality.
+	\item Since many control systems are PIDs, their outputs can be expressed as a differential equation in terms of their current/past inputs and their past outputs.
+	\begin{itemize}
+		\item The Laplace transform is used to help make working with differential equations easier.
+	\end{itemize}
+\item The Laplace transform converts differential equations in the time domain to algebraic equations in the $s$-domain.
+	\item The Laplace transform of a function $f(t)$ is given by:
+\begin{align*}
+	\mathcal{L}\{f(t)\} &= \int_0^\infty f(t) e^{-st} \, dt
+\end{align*}
+
+	\begin{itemize}
+		\item Here, $s = \sigma + i\omega$ where $\sigma, \omega \in \mathbb{R}$.
+	\end{itemize}
+	\item As a mnemonic:
+	\begin{itemize}
+		\item Division by $s$ corresponds to integration.
+		\item Multiplication by $s$ corresponds to differentiation.
+	\end{itemize}
+	\item Letting $c_{final} = \lim_{t \to \infty} c(t)$:
+	\begin{itemize}
+		\item The rise time, $T_r$, is the time for the input to go from 10\% to 90\% of $c_{final}$.
+		\item The peak time, $T_p$, is the time required for $c(t)$ to reach its largest value.
+		\begin{itemize}
+			\item Note that $T_p$ may not always exist, such as in the case of critically/overdamped systems.
+		\end{itemize}
+		\item The percent overshoot, \%OS, is the \% that $c(t)$ overshoots $c_{final}$ at $t = T_p$.
+	\end{itemize}
+	\item The Laplace transform of a function may not always exist.
+	\begin{itemize}
+		\item If a function is piecewise-continuous on $[0, \infty)$, its Laplace transform does exist.
+	\end{itemize}
+	\item The unit step function is given by:
+\begin{align*}
+	u(t) &= \begin{cases} 1, & t \ge 0 \\ 0, & \text{otherwise} \end{cases}
+\end{align*}
+
+	\item Laplace transforms are linear.
+	\item The initial value theorem and final value theorem can only be used when the system is stable.
+	\item Transfer functions describe the response of a control system to some input in the Laplace domain.
+	\begin{itemize}
+		\item Transfer functions are always rational functions in the Laplace domain.
+\begin{align*}
+	G(s) &= \frac{C(s)}{R(s)} = \frac{b_m s^m + b_{m-1} s^{m-1} + \ldots + b_0 s^0}{a_n s^n + a_{n-1} s^{n-1} + \ldots + a_0 s^0}
+\end{align*}
+
+	\end{itemize}
+	\item Input is always defined to be 0 for $t < 0$.
+	\item The inverse Laplace transform is given by:
+\begin{align*}
+	\mathcal{L}^{-1}\{F(s)\} &= \frac{1}{2\pi i} \lim_{\omega \to \infty} \int_{\sigma - i\omega}^{\sigma + i\omega} F(s) e^{st} \, ds
+\end{align*}
+\end{itemize}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
