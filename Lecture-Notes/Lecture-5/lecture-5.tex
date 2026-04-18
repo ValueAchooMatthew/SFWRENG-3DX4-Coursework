@@ -1,0 +1,219 @@
+\ifdefined\iscombined
+	\lecturetitle{Stability, Impedance, and Kirchhoff's Laws}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 5} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Stability, Impedance, and Kirchhoff's Laws}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 5 - Stability, Impedance, and Kirchhoff's Laws}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item For a system to be stable:
+	\begin{enumerate}
+		\item It cannot have any poles with positive real components.
+		\item It can only have at most one pole at the origin.
+	\end{enumerate}
+	%FIX: Needs fixing
+	\item There exist multiple different definitions of stability:
+	\begin{enumerate}
+		\item Bounded-Input Bounded-Output (BIBO) stability.
+		\item \emph{Note to self: Elaborate}.
+	\end{enumerate}
+	\item The act of making the real component of the poles of a transfer function more positive, while still remaining negative:
+	\begin{enumerate}
+		\item Keeps the system stable.
+		\item Increases the system's response time.
+	\end{enumerate}
+	\item Ohm's law states that $v(t) = i(t)R$.
+	\begin{itemize}
+		\item In the Laplace domain, Ohm's law states that $V(s) = I(s)R$.
+	\end{itemize}
+	\item The concept of impedance (denoted $Z(s)$) generalizes the concept of resistance to circuit elements other than resistors to make modelling electrical systems easier.
+	\begin{itemize}
+		\item Impedance is given by:
+\begin{align*}
+	Z(s) &= \frac{V(s)}{I(s)} = R \\
+\end{align*}
+	\end{itemize}
+	\item Capacitors, inductors, and resistors are all said to have an impedance.
+	\item Admittance is defined as the reciprocal of impedance.
+	\begin{itemize}
+		\item Note: Not used much if at all in this course.
+	\end{itemize}
+	\item For a capacitor of capacitance $C$, an inductor of inductance $L$, and a resistor of resistance $R$:
+	\begin{itemize}
+		\item The capacitor's impedance is $\frac{1}{Cs}$.
+		\item The inductor's impedance is $Ls$.
+		\item The resistor's impedance is $R$.
+	\end{itemize}
+	\item The impedance of circuit elements in series with impedances $Z_1, \ldots, Z_n$ is given by:
+\begin{align*}
+	Z_s(s) &= Z_1(s) + \ldots + Z_n(s) \\
+\end{align*}
+	\item The impedance of circuit elements in parallel with impedances $Z_1, \ldots, Z_n$ is given by:
+\begin{align*}
+	\frac{1}{Z_p(s)} &= \frac{1}{Z_1(s)} + \ldots + \frac{1}{Z_n(s)} \\
+\end{align*}
+
+	\item Kirchhoff's current law states that the sum of all currents entering and leaving a node is zero.
+	\begin{itemize}
+		\item Current flowing into a node is said to be positive.
+		\item Current flowing out of a node is said to be negative.
+	\end{itemize}
+	\item Kirchhoff's voltage law states that the sum of all voltages around a closed path sum to zero.
+\end{itemize}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
