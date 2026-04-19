@@ -1,0 +1,339 @@
+\ifdefined\iscombined
+	\lecturetitle{Transfer Functions from Circuits}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{circuitikz}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 6} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Transfer Functions from Circuits}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 6 - Transfer Functions from Circuits}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{example}
+	Find the transfer function for the voltage across the capacitor, $V_c(s)$, in the following circuit:
+\end{example}
+
+\vspace{1em}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[battery1, l=$V(s)$, invert] (0,3);
+		\draw (0,3) to[L, l=$Ls$, i^>=$I(s)$] (3,3);
+		\draw (3,3) to[R, l=$R$] (6,3);
+		\draw (6,3) to[C, l_=$\tfrac{1}{Cs}$] (6,0);
+		\node[right] at (6.5,1.5) {$V_c(s)$};
+		\draw (6,0) -- (0,0);
+	\end{circuitikz}
+\end{figure}
+
+\vspace{1em}
+
+\begin{solution}
+	We know that the transfer function representing the voltage across the capacitor is given by:
+
+	\begin{align*}
+		G_c(s) &= \frac{V_c(s)}{V(s)} \\
+	\end{align*}
+
+	By Kirchhoff's voltage law, we also know that the sum of the voltages around a loop must equal zero. So:
+
+	\begin{align*}
+		V(s) - LsI(s) - RI(s) - V_c(s) &= 0
+	\end{align*}
+
+	We also know the potential difference across the capacitor, $V_c(s)$, can be expressed by $V_c(s) = \frac{1}{Cs} I(s)$. So, using the above substitution and solving for $I(s)$, we find that:
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& V(s) - LsI(s) - RI(s) - \tfrac{1}{Cs} I(s) =& 0 \\
+			\implies & LsI(s) + RI(s) + \tfrac{1}{Cs} I(s) =& V(s) \\
+			\implies & \left( Ls + R + \tfrac{1}{Cs} \right) I(s) =& V(s) \\
+			\implies & I(s) =& \dfrac{V(s)}{Ls + R + \frac{1}{Cs}} \\
+			\implies & I(s) =& \dfrac{Cs V(s)}{LCs^2 + RCs + 1} \\
+		\end{array}
+	\end{equation*}
+
+	\vspace{0.5em}
+
+	And since $V_c(s) = \frac{1}{Cs} I(s)$, as stated before, we can find $V_c(s)$ to be:
+
+	\begin{align*}
+		V_c(s) &= \tfrac{1}{Cs} I(s) \\
+			&= \tfrac{1}{Cs} \left( \frac{Cs V(s)}{LCs^2 + RCs + 1} \right) \\
+			&= \frac{V(s)}{LCs^2 + RCs + 1} \\
+	\end{align*}
+
+	And so, the transfer function for the voltage of the capacitor is given by:
+
+	\begin{align*}
+		G_c(s) &= \frac{V_c(s)}{V(s)} = \frac{1}{LCs^2 + RCs + 1} \\
+	\end{align*}
+\end{solution}
+
+\begin{example}
+	Find the transfer function, $G_c(s)$, for the voltage across the capacitor, $V_c(s)$, in the following circuit:
+\end{example}
+
+\vspace{1em}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[battery1, l=$V(s)$, invert] (0,3);
+		\draw (0,3) to[R, l=$R_1$] (3,3);
+		\draw (3,3) to[R, l=$R_2$] (6,3);
+		\draw (3,3) to[L, l_=$Ls$] (3,0);
+		\draw (6,3) to[C, l_=$\tfrac{1}{Cs}$] (6,0);
+		\node[right] at (6.5,1.5) {$V_c(s)$};
+		\draw (0,0) -- (3,0);
+		\draw (3,0) -- (6,0);
+		\draw[->, thick] (1.7,1.5) ++(135:0.5) arc (135:-135:0.5);
+		\node at (1.7,1.5) {$I_1(s)$};
+		\draw[->, thick] (4.3,1.5) ++(135:0.5) arc (135:-135:0.5);
+		\node at (4.3,1.5) {$I_2(s)$};
+	\end{circuitikz}
+\end{figure}
+
+\vspace{1em}
+
+\begin{solution}
+	As before, we know $G_c(s) = \frac{V_c(s)}{V(s)}$, and by inspection of the circuit, we can see that Kirchhoff's voltage law tells us that for the first loop:
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& V(s) - R_1 I_1(s) - Ls(I_1(s) - I_2(s)) =& 0 \\
+			\implies & R_1 I_1(s) + Ls(I_1(s) - I_2(s)) =& V(s) \\
+			\implies & R_1 I_1(s) + Ls I_1(s) - Ls I_2(s) =& V(s) \\
+			\implies & (R_1 + Ls) I_1(s) - Ls I_2(s) =& V(s) \quad \ldots (1) \\
+		\end{array}
+	\end{equation*}
+
+	\vspace{0.5em}
+
+	And similarly, for loop two:
+
+	\begin{align*}
+		Ls(I_2(s) - I_1(s)) + R_2 I_2(s) + V_c(s) &= 0 \\
+		Ls I_2(s) - Ls I_1(s) + R_2 I_2(s) + V_c(s) &= 0 \\
+	\end{align*}
+
+	And since $V_c(s) = \frac{1}{Cs} I_2(s)$:
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& Ls I_2(s) - Ls I_1(s) + R_2 I_2(s) + \tfrac{1}{Cs} I_2(s) =& 0 \\
+			\implies & -Ls I_1(s) + \left( Ls + R_2 + \tfrac{1}{Cs} \right) I_2(s) =& 0 \quad \ldots (2) \\
+		\end{array}
+	\end{equation*}
+
+	\vspace{0.5em}
+
+	Putting equations $(1)$ and $(2)$ into matrix form, we can see that:
+
+	\begin{align*}
+		\begin{bmatrix} R_1 + Ls & -Ls \\ -Ls & Ls + R_2 + \tfrac{1}{Cs} \end{bmatrix} \begin{bmatrix} I_1(s) \\ I_2(s) \end{bmatrix} &= \begin{bmatrix} V(s) \\ 0 \end{bmatrix} \\
+	\end{align*}
+
+	Since we're interested in finding the transfer function for $V_c(s)$, and since $V_c(s) = \frac{1}{Cs} I_2(s)$, we should seek to compute $I_2(s)$. To do that, we will make use of Kramer's rule. For these particular matrices, Kramer's rule tells us that:
+
+	\begin{align*}
+		I_2(s) &= \frac{\det(A_2)}{\det(A)} \\
+	\end{align*}
+
+	Where:
+
+	\begin{align*}
+		A &= \begin{bmatrix} R_1 + Ls & -Ls \\ -Ls & Ls + R_2 + \tfrac{1}{Cs} \end{bmatrix}, \quad A_2 = \begin{bmatrix} R_1 + Ls & V(s) \\ -Ls & 0 \end{bmatrix} \\
+	\end{align*}
+
+	First, we can find that:
+
+	\begin{align*}
+		\det(A) &= (R_1 + Ls)\left( Ls + R_2 + \tfrac{1}{Cs} \right) - (-Ls)(-Ls) \\
+			&= LR_1 s + R_1 R_2 + \tfrac{R_1}{Cs} + L^2 s^2 + L R_2 s + \tfrac{L}{C} - L^2 s^2 \\
+			&= LR_1 s + R_1 R_2 + \tfrac{R_1}{Cs} + LR_2 s + \tfrac{L}{C} \\
+			&= \tfrac{R_1}{Cs} + \left( R_1 R_2 + \tfrac{L}{C} \right) + (LR_1 + LR_2) s \\
+	\end{align*}
+
+	And similarly:
+
+	\begin{align*}
+		\det(A_2) &= (R_1 + Ls)(0) - (V(s))(-Ls) \\
+			&= Ls V(s) \\
+	\end{align*}
+
+	Therefore:
+
+	\begin{align*}
+		I_2(s) &= \frac{Ls V(s)}{\frac{R_1}{Cs} + \left( R_1 R_2 + \frac{L}{C} \right) + (LR_1 + LR_2) s} \\
+	\end{align*}
+
+	Hence:
+
+	\begin{align*}
+		V_c(s) &= \tfrac{1}{Cs} I_2(s) \\
+			&= \tfrac{1}{Cs} \left( \frac{Ls V(s)}{\frac{R_1}{Cs} + \left( R_1 R_2 + \frac{L}{C} \right) + (LR_1 + LR_2) s} \right) \\
+			&= \frac{L V(s)}{R_1 + (R_1 R_2 C + L) s + (LR_1 C + LR_2 C) s^2} \\
+	\end{align*}
+
+	And thus:
+
+	\begin{align*}
+		G_c(s) &= \frac{V_c(s)}{V(s)} = \frac{L}{R_1 + (R_1 R_2 C + L) s + (LR_1 C + LR_2 C) s^2} \\
+	\end{align*}
+\end{solution}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
