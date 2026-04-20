@@ -1,0 +1,255 @@
+\ifdefined\iscombined
+	\lecturetitle{Op-amps and Active Circuits}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{circuitikz}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 8} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Op-amps and Active Circuits}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 8 - Op-amps and Active Circuits}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item Quiz next week will be on circuit analysis.
+	\item Op-amps probably won't be on the midterm.
+	\item Operational amplifiers (op-amps) are a kind of circuit element used to produce `active' circuits.
+	\begin{itemize}
+		\item Active circuits are used to implement transfer functions as a circuit.
+	\end{itemize}
+	\item Passive circuits only use passive circuit elements.
+	\begin{itemize}
+		\item Passive circuit elements only consume energy.
+		\begin{itemize}
+			\item Ex. Resistors, capacitors, etc.
+		\end{itemize}
+		\item All circuits seen thus far in the course used only passive elements (besides the source voltage).
+	\end{itemize}
+	\item Active circuits use one or more active circuit elements.
+	\begin{itemize}
+		\item Active circuit elements amplify, produce, or switch energy.
+		\begin{itemize}
+			\item Ex. Source voltages, op-amps, etc.
+		\end{itemize}
+	\end{itemize}
+	\item Op-amps effectively work like low-pass filters with a very high cut-off.
+	\item Op-amps look like this:
+\end{itemize}
+
+\vspace{1em}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) node[op amp] (opamp) {$A$};
+		\draw (opamp.-) -- ++(-1,0) node[left]{$+V_1(t)$};
+		\draw (opamp.+) -- ++(-1,0) node[left]{$+V_2(t)$};
+		\draw (opamp.out) -- ++(1,0) node[right]{$V_o(t)$};
+		\node[above=2pt] at ([xshift=-5pt]opamp.-) {$\scriptstyle i_-$};
+		\node[below=2pt] at ([xshift=-5pt]opamp.+) {$\scriptstyle i_+$};
+	\end{circuitikz}
+\end{figure}
+
+\vspace{1em}
+
+Where:
+
+\begin{itemize}
+	\item $V_1(t)$ and $V_2(t)$ are its input voltages.
+	\item $i_-(t)$ and $i_+(t)$ are its input currents.
+	\item $V_o(t)$ is its output voltage.
+	\item $A$ is its gain.
+\end{itemize}
+
+\vspace{.5em}
+
+\begin{itemize}
+	\item Op-amps have four important characteristics in an ideal setting:
+	\begin{enumerate}
+		\item $V_o(t) = A(V_2(t) - V_1(t))$.
+		\item High input impedance.
+		\begin{itemize}
+			\item I.E. $Z_i = \infty$.
+		\end{itemize}
+		\item Low output impedance.
+		\begin{itemize}
+			\item I.E. $Z_o = 0$.
+		\end{itemize}
+		\item High gain constant.
+		\begin{itemize}
+			\item I.E. $A = \infty$.
+		\end{itemize}
+	\end{enumerate}
+	\item Ideal op-amps also:
+	\begin{itemize}
+		\item Have equal input voltages.
+		\begin{itemize}
+			\item $V_1(t) = V_2(t)$.
+		\end{itemize}
+		\item Have zero input currents.
+		\begin{itemize}
+			\item $i_-(t) = i_+(t) = 0$.
+		\end{itemize}
+	\end{itemize}
+	\item The relationship between the input and output voltages of an op-amp is linear around a specific input voltage.
+	\begin{itemize}
+		\item The saturation voltages are the voltages where this is no longer true.
+	\end{itemize}
+	\item Chaining op-amps together makes them more stable.
+	\begin{itemize}
+		\item \emph{Aside:} Not too sure what exactly that means.
+	\end{itemize}
+\end{itemize}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
