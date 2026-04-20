@@ -1,0 +1,477 @@
+\ifdefined\iscombined
+	\lecturetitle{Rotational Mechanical Systems}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows,calc,patterns,decorations.pathmorphing,decorations.markings,shapes.geometric}
+\usepackage{circuitikz}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 11} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Rotational Mechanical Systems}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 11 - Rotational Mechanical Systems}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\vspace{1em}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item The degrees of freedom of a rotational system is given by the number of linearly independent rotations in the system.
+	\begin{itemize}
+		\item Two inertias have linearly independent rotations if holding one in place still allows for the other to rotate.
+		\item The degrees of freedom of a rotational system can be more tricky to determine than of translational systems.
+	\end{itemize}
+
+	\item Impedances in rotational systems work as follows:
+	\begin{itemize}
+		\item A moment of inertia $J$ imparts an impedance of $Js^2$ on a rotating body.
+		\item A viscous damper with a damping constant $D$ imparts an impedance of $Ds$ on a rotating body.
+		\item A spring with a spring constant $K$ imparts an impedance of $K$ on a rotating body.
+	\end{itemize}
+	\item The transfer function of rotational systems describes the ratio between a body's rotation and an applied torque:
+\end{itemize}
+
+\begin{align*}
+	G(s) &= \frac{\Theta_i(s)}{T(s)}
+\end{align*}
+
+\begin{example}
+	Find the transfer function $G(s) = \frac{\Theta_2(s)}{T(s)}$ for the following system:
+
+	\vspace{1em}
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[>=latex]
+			\tikzstyle{spring}=[thick,decorate,decoration={zigzag,pre length=0.3cm,post length=0.3cm,segment length=6}]
+			\tikzstyle{damper}=[thick,decoration={markings,
+				mark connection node=dmp,
+				mark=at position 0.5 with
+				{
+					\node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+					\draw [thick] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+					\draw [thick] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+				}
+			}, decorate]
+
+			\newcommand{\AxisRotator}[1][rotate=0]{%
+				\tikz [x=0.25cm,y=0.60cm,line width=.2ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+			}
+
+			% Left wall
+			\fill [pattern=north east lines] (0,-1.8) rectangle (0.3,1.8);
+			\draw [thick] (0.3,-1.8) -- (0.3,1.8);
+
+			% J_1 inertia
+			\node (J1) [thick, cylinder, draw, minimum width=0.9cm, minimum height=1.4cm] at (2.8,0) {$J_1$};
+
+			% Damper D_1 between left wall and J_1
+			\draw [damper] (0.3,0) -- (J1.west) node[midway, above=8pt, fill=white] {$D_1$};
+
+			% J_2 inertia
+			\node (J2) [thick, cylinder, draw, fill=white, minimum width=0.9cm, minimum height=1.4cm] at (6,0) {$J_2$};
+
+			% Spring K between J_1 and J_2
+			\draw [spring] ($(J1.east) + (-0.2, 0)$) -- (J2.west) node[midway, above=4pt, fill=white] {$K$};
+
+			% Damper D_2 between J_2 and right wall
+			\draw [damper] (8.5,0) -- ($(J2.east) + (-0.2, 0)$)   node[midway, above=8pt, fill=white] {$D_2$};
+
+			% Right wall
+			\draw [thick] (8.5,-1.8) -- (8.5,1.8);
+			\fill [pattern=north east lines] (8.5,-1.8) rectangle (8.8,1.8);
+
+			% Applied torque T(t) on J_1
+
+			\draw ($(J1.center) + (-0.3, 0)$)  node[above=10pt, label={[label distance = -3pt, font=\scriptsize]above:{$T(t)$}}] {\AxisRotator[rotate = 180, scale=.5]};
+			\draw ($(J1.center) + (0.5, 0)$)  node[above=10pt, label={[label distance = -3pt, font=\scriptsize]above:{$\theta_1(t)$}}] {\AxisRotator[rotate = 180, dashed, scale=.5]};
+			\draw ($(J2.center) + (0.2, 0)$)  node[above=10pt, label={[label distance = -3pt, font=\scriptsize]above:{$\theta_2(t)$}}] {\AxisRotator[rotate = 180, dashed, scale=.5]};
+		\end{tikzpicture}
+	\end{figure}
+
+	\vspace{1em}
+\end{example}
+
+\begin{solution}
+	%TODO: Review
+	First, it is important to notice that the given system has two degrees of freedom. \\
+
+	Analogously to translational systems, we can construct FBDs for each rotating body by leveraging Newton's second law of motion and the superposition principle. In the interest of not beating a dead horse, we can see the following FBDs accurately represent the given system:
+
+	\vspace{1em}
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[>=latex']
+			\draw (0,-1.4) rectangle (1.5,2.8);
+			\node at (0.75,0.7) {$J_1$};
+			\draw[->] (0,1.8) -- node[midway, fill=white]{$s^2 J_1 \Theta_1(s)$} (-3.4,1.8);
+			\draw[->] (0,0.7) -- node[midway, fill=white]{$s D_1 \Theta_1(s)$} (-3.4,0.7);
+			\draw[->] (0,-0.6) -- node[midway, fill=white]{$K \Theta_1(s)$} (-3.4,-0.6);
+			\draw[->] (4.7,1.8) -- node[midway, fill=white]{$T(s)$} (1.5,1.8);
+			\draw[->] (4.7,-0.6) -- node[midway, fill=white]{$K \Theta_2(s)$} (1.5,-0.6);
+			\draw[dashed, ->] ($(0.25,3.3)$) arc (180:0:0.5cm and 0.2cm) node[midway, above, fill=white] {$\Theta_1(s)$};
+		\end{tikzpicture}
+		\hspace{1em}
+		\begin{tikzpicture}[>=latex']
+			\draw (0,-1.4) rectangle (1.5,2.8);
+			\node at (0.75,0.7) {$J_2$};
+			\draw[->] (0,1.8) -- node[midway, fill=white]{$s^2 J_2 \Theta_2(s)$} (-3.4,1.8);
+			\draw[->] (0,0.7) -- node[midway, fill=white]{$s D_2 \Theta_2(s)$} (-3.4,0.7);
+			\draw[->] (0,-0.6) -- node[midway, fill=white]{$K \Theta_2(s)$} (-3.4,-0.6);
+			\draw[->] (4.7,0.7) -- node[midway, fill=white]{$K \Theta_1(s)$} (1.5,0.7);
+			\draw[dashed, ->] ($(0.25,3.3)$) arc (180:0:0.5cm and 0.2cm) node[midway, above, fill=white] {$\Theta_2(s)$};
+		\end{tikzpicture}
+	\end{figure}
+
+	\vspace{1em}
+
+	By Newton's third law of motion, summing the torques on $J_1$ gives:
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& s^2 J_1 \Theta_1(s) + s D_1 \Theta_1(s) + K \Theta_1(s) =& T(s) + K \Theta_2(s) \\
+			\implies & s^2 J_1 \Theta_1(s) + s D_1 \Theta_1(s) + K \Theta_1(s) - K \Theta_2(s) =& T(s) \\
+			\implies & (s^2 J_1 + s D_1 + K) \Theta_1(s) - K \Theta_2(s) =& T(s) \quad \ldots (1)
+		\end{array}
+	\end{equation*} \\
+
+	And similarly for $J_2$:
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& s^2 J_2 \Theta_2(s) + s D_2 \Theta_2(s) + K \Theta_2(s) =& K \Theta_1(s) \\
+			\implies & -K \Theta_1(s) + s^2 J_2 \Theta_2(s) + s D_2 \Theta_2(s) + K \Theta_2(s) =& 0 \\
+			\implies & -K \Theta_1(s) + (s^2 J_2 + s D_2 + K) \Theta_2(s) =& 0 \quad \ldots (2)
+		\end{array}
+	\end{equation*} \\
+
+	Putting equations $(1)$ and $(2)$ into matrix form, we see that:
+
+	\begin{align*}
+		\begin{bmatrix} J_1 s^2 + D_1 s + K & -K \\\\ -K & J_2 s^2 + D_2 s + K \end{bmatrix} \begin{bmatrix} \Theta_1(s) \\\\ \Theta_2(s) \end{bmatrix} &= \begin{bmatrix} T(s) \\\\ 0 \end{bmatrix} \\\\
+	\end{align*}
+
+	And so, letting $A$ be the left-most matrix above and $A_2$ be the result of replacing the second column of $A$ with $\begin{bmatrix} T(s) \\\\ 0 \end{bmatrix}$:
+	%TODO: Review
+
+	\begin{align*}
+		A_2 &= \begin{bmatrix} J_1 s^2 + D_1 s + K & T(s) \\\\ -K & 0 \end{bmatrix} \\\\
+	\end{align*}
+
+	We can compute:
+
+	\begin{align*}
+		\det(A) &= (J_1 s^2 + D_1 s + K)(J_2 s^2 + D_2 s + K) - (-K)(-K) \\
+			&= J_1 J_2 s^4 + (J_1 D_2 + J_2 D_1) s^3 + (J_1 K + D_1 D_2 + J_2 K) s^2 + (D_1 + D_2) K s \\
+	\end{align*}
+
+	And:
+
+	\begin{align*}
+		\det(A_2) &= (J_1 s^2 + D_1 s + K)(0) - (T(s))(-K) \\
+			&= K T(s) \\
+	\end{align*}
+
+	Hence by Cramer's rule:
+
+	\begin{align*}
+		\Theta_2(s) &= \frac{\det(A_2)}{\det(A)} = \frac{K T(s)}{J_1 J_2 s^4 + (J_1 D_2 + J_2 D_1) s^3 + (J_1 K + D_1 D_2 + J_2 K) s^2 + (D_1 + D_2) K s} \\
+	\end{align*}
+
+	And thus we can conclude that:
+
+	\begin{align*}
+		G(s) &= \frac{\Theta_2(s)}{T(s)} = \frac{K}{J_1 J_2 s^4 + (J_1 D_2 + J_2 D_1) s^3 + (J_1 K + D_1 D_2 + J_2 K) s^2 + (D_1 + D_2) K s} \\
+	\end{align*}
+\end{solution}
+
+\begin{example}
+	Determine how many degrees of freedom the following system has:
+
+	\vspace{1em}
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[>=latex]
+			\tikzstyle{spring}=[thick,decorate,decoration={zigzag,pre length=0.3cm,post length=0.3cm,segment length=6}]
+			\tikzstyle{damper}=[thick,decoration={markings,
+				mark connection node=dmp,
+				mark=at position 0.5 with
+				{
+					\node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+					\draw [thick] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+					\draw [thick] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+				}
+			}, decorate]
+
+			% Left wall
+			\fill [pattern=north east lines] (0,-1.3) rectangle (0.3,1.9);
+			\draw [thick] (0.3,-1.3) -- (0.3,1.9);
+
+			% Massless rod from wall to J_1
+			\draw [thick] (0.3,0) -- (1.0,0);
+
+			% J_1 inertia (1 kg m^2)
+			\node (J1) [draw, thick, ellipse, minimum width=1.6cm, minimum height=1cm, fill=white] at (1.8,0) {$1\,\text{kg}\,\text{m}^2$};
+
+			% Right side of J_1 connects to a junction point at (3.0, 0)
+			\draw [thick] (2.6,0) -- (3.3,0);
+
+			% Parallel spring/damper #1 between J_1 and middle rod
+			\draw [spring] (3.3,0.5) -- (5.1,0.5) node[midway, above=4pt, fill=white] {$1\,\text{Nm/rad}$};
+			\draw [damper] (3.3,-0.5) -- (5.1,-0.5) node[midway, below=4pt, fill=white] {$1\,\text{Nms/rad}$};
+			\draw [thick] (3.3,0.5) -- (3.3,-0.5);
+			\draw [thick] (5.1,0.5) -- (5.1,-0.5);
+			\draw [thick] (5.1,0) -- (5.9,0);
+
+			% Gap (two rods meeting and splitting)
+			\draw [thick] (5.9,0) -- (6.5,0);
+
+			% Parallel spring/damper #2 between middle rod and right wall
+			\draw [spring] (6.5,0.5) -- (8.3,0.5) node[midway, above=4pt, fill=white] {$1\,\text{Nm/rad}$};
+			\draw [damper] (6.5,-0.5) -- (8.3,-0.5) node[midway, below=4pt, fill=white] {$1\,\text{Nms/rad}$};
+			\draw [thick] (6.5,0.5) -- (6.5,-0.5);
+			\draw [thick] (8.3,0.5) -- (8.3,-0.5);
+			\draw [thick] (8.3,0) -- (9.0,0);
+
+			% Right wall
+			\draw [thick] (9.0,-1.3) -- (9.0,1.9);
+			\fill [pattern=north east lines] (9.0,-1.3) rectangle (9.3,1.9);
+
+			% Applied torque T(t) on J_1
+			\draw [->, thick] ($(J1.north) + (0,0.85)$) -- ($(J1.north) + (0,0.05)$) node[midway, fill=white] {$T(t)$};
+
+			% Rotation indicator on J_1
+			\draw [dashed, ->] ($(J1.west) + (0.1,1.6)$) arc (180:0:0.7cm and 0.2cm) node[midway, above, fill=white] {$\theta_1(t)$};
+		\end{tikzpicture}
+	\end{figure}
+
+	\vspace{1em}
+\end{example}
+
+\begin{solution}
+	Unintuitively, this system actually has two degrees of freedom, despite only having a single body with an inertia! \\
+
+	It is clear that the body with an inertia of $1\,\text{kg}\,\text{m}^2$ constitutes one degree of freedom for the system. To see the other, consider locking that body in place such that it cannot rotate. \\
+
+	Because of the way the rods between the springs and viscous dampers connect, even when holding the body still, we could apply a torque on the rod connecting the springs and viscous dampers to induce a rotation on the system. This gives an extra degree of freedom! \\
+
+	To see this more clearly, we could equivalently redraw the system like so:
+
+	\vspace{1em}
+
+	\begin{figure}[H]
+		\centering
+		\begin{tikzpicture}[>=latex]
+			\tikzstyle{spring}=[thick,decorate,decoration={zigzag,pre length=0.3cm,post length=0.3cm,segment length=6}]
+			\tikzstyle{damper}=[thick,decoration={markings,
+				mark connection node=dmp,
+				mark=at position 0.5 with
+				{
+					\node (dmp) [thick,inner sep=0pt,transform shape,rotate=-90,minimum width=15pt,minimum height=3pt,draw=none] {};
+					\draw [thick] ($(dmp.north east)+(2pt,0)$) -- (dmp.south east) -- (dmp.south west) -- ($(dmp.north west)+(2pt,0)$);
+					\draw [thick] ($(dmp.north)+(0,-5pt)$) -- ($(dmp.north)+(0,5pt)$);
+				}
+			}, decorate]
+
+			% Left wall
+			\fill [pattern=north east lines] (0,-1.3) rectangle (0.3,1.9);
+			\draw [thick] (0.3,-1.3) -- (0.3,1.9);
+
+			% Rod from wall to J_1
+			\draw [thick] (0.3,0) -- (1.0,0);
+
+			% J_1 inertia (1 kg m^2)
+			\node (J1) [draw, thick, ellipse, minimum width=1.6cm, minimum height=1cm, fill=white] at (1.8,0) {$1\,\text{kg}\,\text{m}^2$};
+
+			% Rod from J_1 to parallel spring/damper #1
+			\draw [thick] (2.6,0) -- (3.3,0);
+
+			% Parallel spring/damper #1
+			\draw [spring] (3.3,0.5) -- (5.1,0.5) node[midway, above=4pt, fill=white] {$1\,\text{Nm/rad}$};
+			\draw [damper] (3.3,-0.5) -- (5.1,-0.5) node[midway, below=4pt, fill=white] {$1\,\text{Nms/rad}$};
+			\draw [thick] (3.3,0.5) -- (3.3,-0.5);
+			\draw [thick] (5.1,0.5) -- (5.1,-0.5);
+			\draw [thick] (5.1,0) -- (5.5,0);
+
+			% J_2 inertia (0 kg m^2)
+			\node (J2) [draw, thick, ellipse, minimum width=1.6cm, minimum height=1cm, fill=white] at (6.3,0) {$0\,\text{kg}\,\text{m}^2$};
+
+			% Rod from J_2 to parallel spring/damper #2
+			\draw [thick] (7.1,0) -- (7.5,0);
+
+			% Parallel spring/damper #2
+			\draw [spring] (7.5,0.5) -- (9.3,0.5) node[midway, above=4pt, fill=white] {$1\,\text{Nm/rad}$};
+			\draw [damper] (7.5,-0.5) -- (9.3,-0.5) node[midway, below=4pt, fill=white] {$1\,\text{Nms/rad}$};
+			\draw [thick] (7.5,0.5) -- (7.5,-0.5);
+			\draw [thick] (9.3,0.5) -- (9.3,-0.5);
+			\draw [thick] (9.3,0) -- (10.0,0);
+
+			% Right wall
+			\draw [thick] (10.0,-1.3) -- (10.0,1.9);
+			\fill [pattern=north east lines] (10.0,-1.3) rectangle (10.3,1.9);
+
+			% Applied torque T(t) on J_1
+			\draw [->, thick] ($(J1.north) + (0,0.85)$) -- ($(J1.north) + (0,0.05)$) node[midway, fill=white] {$T(t)$};
+
+			% Rotation indicators
+			\draw [dashed, ->] ($(J1.west) + (0.1,1.6)$) arc (180:0:0.7cm and 0.2cm) node[midway, above, fill=white] {$\theta_1(t)$};
+			\draw [dashed, ->] ($(J2.west) + (0.1,1.6)$) arc (180:0:0.7cm and 0.2cm) node[midway, above, fill=white] {$\theta_2(t)$};
+		\end{tikzpicture}
+	\end{figure}
+
+	\vspace{1em}
+
+	And since this equivalent system has two degrees of freedom, so does the one given in the question.
+\end{solution}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
