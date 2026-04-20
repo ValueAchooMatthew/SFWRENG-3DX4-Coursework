@@ -1,0 +1,361 @@
+\ifdefined\iscombined
+	\lecturetitle{Cramer's Rule and Nodal Analysis}
+\else
+\documentclass{article}
+\usepackage{xparse}
+\usepackage{changepage}
+\usepackage{listings}
+\usepackage{amsthm}
+\usepackage{comment}
+\usepackage{amsmath}
+\usepackage{braket}
+\usepackage{amsfonts}
+\usepackage{sectsty}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage[top=1in,bottom=1in,left=1in,right=1in]{geometry}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usetikzlibrary{arrows}
+\usepackage{circuitikz}
+
+\date{
+	\vspace{-.75em}
+	{\large \today}
+}
+
+\title{
+	\vspace*{-1.5em}
+	{\Huge Lecture 7} \\
+	\vspace{-1em}
+	\rule{\textwidth/4}{.01em} \\
+	\vspace{-.25em}
+	{\Large Cramer's Rule and Nodal Analysis}
+	\vspace{-.75em}
+}
+
+\author{
+	{\large Matthew Farah}
+}
+
+\hypersetup{
+	colorlinks=true,
+	linkcolor=blue,
+	filecolor=magenta,
+	urlcolor=blue,
+	citecolor=blue,
+	anchorcolor=blue
+}
+
+\fancyhead{}
+\fancyhead[L]{\today}
+\fancyhead[R]{Lecture 7 - Cramer's Rule and Nodal Analysis}
+
+\setlength{\parindent}{0cm}
+
+\newcounter{example}
+\renewcommand{\theexample}{\arabic{example}}
+
+\newenvironment{example}[1][]{
+	\refstepcounter{example}
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Example \theexample:\else Example \theexample \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newenvironment{solution}{
+	\vspace{.5em}
+	\par
+	\begin{adjustwidth}{1.5em}{}
+	\textbf{{Solution:}}
+	\par
+	\vspace{.5em}
+}{
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\newcounter{subexample}
+\renewcommand{\thesubexample}{\alph{subexample}}
+
+\newenvironment{subexample}{
+	\setcounter{step}{0}
+	\refstepcounter{subexample}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{(\thesubexample)}
+	\ignorespaces
+}{
+	\par
+	\vspace{1em}
+	\end{adjustwidth}
+}
+
+\renewenvironment{proof}{
+	\vspace{.5em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\emph{Proof:}\par\vspace{1em}
+	\setlength{\parindent}{0cm}
+}{
+	\end{adjustwidth}
+}
+
+\newtheorem{theorem}{Theorem}
+
+\renewenvironment{theorem}[1][]{
+	\refstepcounter{theorem}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Theorem \thetheorem:\else Theorem \thetheorem \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\newtheorem{lemma}{Lemma}
+
+\renewenvironment{lemma}[1][]{
+	\refstepcounter{lemma}
+	\vspace{1em}\par\noindent
+	\begin{adjustwidth}{1.5em}{}
+	\noindent\textbf{\ifx&#1&Lemma \thelemma:\else Lemma \thelemma \ (#1):\fi}
+	\ignorespaces
+}{
+	\vspace{.5em}
+	\end{adjustwidth}
+}
+
+\makeatother
+\makeatletter
+
+\newcounter{step}
+\renewcommand{\thestep}{\Roman{step}}
+
+\newenvironment{step}{
+	\refstepcounter{step}
+	\vspace{1em}\par\noindent
+	\ignorespaces\noindent\textbf{(\thestep)}
+	\ignorespaces
+}{
+	\par
+}
+
+\sectionfont{\fontsize{12}{12}\bfseries}
+\subsectionfont{\fontsize{10}{12}\normalfont}
+\subsubsectionfont{\fontsize{10}{12}\normalfont}
+
+\begin{document}
+
+\maketitle
+\pagestyle{fancy}
+
+\fi
+
+\begin{itemize}
+	\item Cramer's rule is a very useful tool to find a specific unknown in a system of equations.
+	\begin{itemize}
+		\item States that for a system of equations $A \vec{x} = \vec{b}$ where $\vec{x} = \langle x_1, \ldots, x_n \rangle$, $x_i = \frac{\det(A_i)}{\det(A)}$, where $A_i$ is the matrix produced by replacing column $i$ of $A$ with $\vec{b}$.
+	\end{itemize}
+	\item Nodal analysis is another method of finding the transfer function for circuit elements.
+	\begin{itemize}
+		\item Leverages Kirchhoff's current law.
+		\begin{itemize}
+			\item States that the net current into/out of a junction equals zero. \\
+\begin{align*}
+	\sum_{i \in \text{junction}} i(t) &= 0 \\
+\end{align*}
+		\end{itemize}
+		\item A junction in a circuit is a point where two or more wires intersect.
+		\begin{itemize}
+			\item Nodal analysis works by identifying the voltage at junctions with a node and using Kirchhoff's current law to determine the current that passes through the circuit elements between them.
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+\begin{example}
+	Using nodal analysis, find the transfer function, $G_c(s)$, for the potential difference across the capacitor, $V_c(s)$, in the following circuit:
+\end{example}
+
+\vspace{1em}
+
+\begin{figure}[H]
+	\centering
+	\begin{circuitikz}
+		\draw (0,0) to[battery1, l=$V(s)$, invert] (0,3);
+		\draw (0,3) -- (0,5);
+		\draw (0,5) to[C] (9,5);
+		\draw (9,5) -- (9,3);
+		\node[above] at (4.5, 5.5) {$C = 1\mathrm{F}$};
+		\node[above] at (4.5, 6.0) {$V_c(s)$};
+		\draw (0,3) to[R, l=$1\Omega$] (4.5,3);
+		\draw (4.5,3) to[L, l=$4\mathrm{H}$] (9,3);
+		\draw (4.5,3) to[R, l=$1\Omega$] (4.5,1.5);
+		\draw (4.5,1.5) to[L, l=$2\mathrm{H}$] (4.5,0);
+		\draw (9,3) to[L, l=$3\mathrm{H}$] (9,0);
+		\draw (0,0) -- (4.5,0) -- (9,0);
+	\end{circuitikz}
+\end{figure}
+
+\vspace{1em}
+
+\begin{solution}
+	Before diving straight into calculations, I think it's best to first try and give some intuition behind the method. \\
+
+	Firstly, in order to do nodal analysis, we need to identify where the nodes in our circuit actually are. Using the description of nodes given earlier, the circuit's nodes, as well as the respective currents passing through them, can be depicted as follows:
+
+	\vspace{1em}
+
+	\begin{figure}[H]
+		\centering
+		\begin{circuitikz}
+			\draw (0,0) to[battery1, l=$V(s)$, invert] (0,3);
+			\draw (0,3) -- (0,5);
+			\draw (0,5) to[C] (9,5);
+			\draw (9,5) -- (9,3);
+			\node[above] at (4.5, 5.3) {$\tfrac{1}{s}$};
+			\node[above] at (4.5, 5.8) {$V_c(s)$};
+			\draw (0,3) to[R, l_=$1$] (4.5,3);
+			\draw (4.5,3) to[L, l_=$4s$] (9,3);
+			\draw (4.5,3) to[R, l=$1$] (4.5,1.5);
+			\draw (4.5,1.5) to[L, l=$2s$] (4.5,0);
+			\draw (9,3) to[L, l=$3s$] (9,0);
+			\draw (0,0) -- (4.5,0);
+			\draw (4.5,0) -- (9,0);
+			\draw (4.5,0) to[short] (4.5,-0.5) node[ground]{};
+			\node[circle, fill, inner sep=1.5pt] at (0,3) {};
+			\node[circle, fill, inner sep=1.5pt] at (4.5,3) {};
+			\node[circle, fill, inner sep=1.5pt] at (9,3) {};
+			\node[circle, fill, inner sep=1.5pt] at (4.5,0) {};
+			\node[left] at (-0.2, 3) {$V_1(s)$};
+			\node[above] at (4.5, 3.2) {$V_2(s)$};
+			\node[right] at (9.2, 3) {$V_3(s)$};
+			\node[below] at (4.5, -0.2) {$V_4(s)$};
+			\draw[->, thick] (-1.8, 0.8) -- (-1.8, 2.2) node[midway,left]{$I_1(s)$};
+			\draw[->, thick] (-0.3, 3.3) -- (-0.3, 4.7) node[midway,left]{$I_2(s)$};
+			\draw[->, thick] (1.5, 3.35) -- (3, 3.35) node[midway,above]{$I_3(s)$};
+			\draw[->, thick] (4, 2.5) -- (4, 0.5) node[midway,left]{$I_4(s)$};
+			\draw[->, thick] (6, 3.35) -- (7.5, 3.35) node[midway,above]{$I_5(s)$};
+			\draw[->, thick] (8.5, 2.5) -- (8.5, 0.5) node[midway,left]{$I_6(s)$};
+		\end{circuitikz}
+	\end{figure}
+
+	\vspace{1em}
+
+	Now, it's important to make note of a few things:
+
+	\begin{itemize}
+		\item A source (i.e. the ground) was added to node $V_4(s)$.
+		\begin{itemize}
+			\item Makes the voltage at that node equal to zero (i.e. $V_4(s) = 0$).
+		\end{itemize}
+		\item In general, we can always add a source to ground for one node in the circuit.
+		\begin{itemize}
+			\item Picking which node makes solving the problem easier should be chosen.
+			\item Picking the best node to do this with comes with practice.
+		\end{itemize}
+		\item $V_1 = V(s)$.
+		\begin{itemize}
+			\item Since the \underline{only} circuit element between $V_1(s)$ and the ground is the voltage source $V(s)$.
+			\item Thus, we don't need to consider the current between $V(s)$ and $V_1(s)$ (I.E., $I_1(s)$).
+		\end{itemize}
+		\item We can express $V_c(s)$.
+		\begin{itemize}
+			\item $V_c(s) = V_1(s) - V_3(s) = V(s) - V_3(s)$
+		\end{itemize}
+	\end{itemize}
+
+	Now, proceeding to the calculations, we can use Kirchhoff's current law to ascertain that:
+
+	\begin{align*}
+		I_3(s) &= I_4(s) + I_5(s) \quad \ldots (1) \\
+		I_6(s) &= I_2(s) + I_5(s) \quad \ldots (2) \\
+	\end{align*}
+
+	By Ohm's law, the change in voltage between any two nodes is given by $V(s) = IZ(s)$ (where $Z(s)$ is the impedance between the two nodes). \\
+
+	So, using the equations above and the rules regarding adding impedences in series, we arrive at equation (3):
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& I_3(s) = I_4(s) + I_5(s) \\\\
+			\implies & \frac{V_1(s) - V_2(s)}{1} =& \frac{V_2(s) - V_4(s)}{1 + 2s} + \frac{V_2(s) - V_3(s)}{4s} \\\\
+			\implies & V(s) - V_2(s) =& \frac{V_2(s) - 0}{1 + 2s} + \frac{V_2(s) - V_3(s)}{4s} \\\\
+			\implies & \left(1 + \frac{1}{1 + 2s} + \frac{1}{4s}\right)V_2(s) - \frac{1}{4s}V_3(s) =& V(s) \ldots (3) \\
+		\end{array} \\
+	\end{equation*}
+
+	and equation (4): \\
+
+	\begin{equation*}
+		\begin{array}{lrl}
+			& I_6(s) = I_2(s) + I_5(s) \\\\
+			\implies & \frac{V_3(s) - V_4(s)}{3s} =& \frac{V_1(s) - V_3(s)}{1/s} + \frac{V_2(s) - V_3(s)}{4s} \\\\
+			\implies & \frac{V_3(s) - 0}{3s} =& sV(s) - sV_3(s) + \frac{1}{4s}V_2(s) - \frac{1}{4s}V_3(s) \\\\
+			\implies & -\frac{1}{4s}V_2(s) + \left(s + \frac{1}{3s} + \frac{1}{4s} \right)V_3(s) =& sV(s) \\\\
+			\implies & -\frac{1}{4s}V_2(s) + \left(s + \frac{7}{12s}\right)V_3(s) =& sV(s) \ldots (4) \\
+		\end{array} \\
+	\end{equation*}
+
+	So, representing equations (3) and (4) in matrix form, we have: \\
+
+	\begin{align*}
+		\begin{bmatrix} 1 + \tfrac{1}{2s + 1} + \tfrac{1}{4s} & -\tfrac{1}{4s} \\\\ -\tfrac{1}{4s} & s + \tfrac{7}{12s} \end{bmatrix} \begin{bmatrix} V_2(s) \\\\ V_3(s) \end{bmatrix} &= \begin{bmatrix} V(s) \\\\ sV(s) \end{bmatrix} \\
+	\end{align*}
+
+	By Cramer's rule, we know that $V_3(s) = \frac{\det(A_2)}{\det(A)}$, where:
+
+	\begin{align*}
+		A &= \begin{bmatrix} 1 + \tfrac{1}{2s + 1} + \tfrac{1}{4s} & -\tfrac{1}{4s} \\\\ -\tfrac{1}{4s} & s + \tfrac{7}{12s} \end{bmatrix}, \quad A_2 = \begin{bmatrix} 1 + \tfrac{1}{1+2s} + \tfrac{1}{4s} & V(s) \\\\ -\tfrac{1}{4s} & sV(s) \end{bmatrix} \\
+	\end{align*}
+
+	So, since:
+
+	\begin{align*}
+		\det(A) &= \left(1 + \frac{1}{2s + 1} + \frac{1}{4s} \right)\left( s + \frac{7}{12s} \right) - \left( -\frac{1}{4s} \right)\left( -\frac{1}{4s} \right) \\\\
+			&= s + \frac{s}{2s + 1} + \frac{7}{24s^2 + 12s} + \frac{7}{12s} + \frac{1}{12s^2} + \frac{1}{4} \\\\
+			&= \frac{24s^4 + 30s^3 + 17s^2 + 16s + 1}{24s^3 + 12s^2} \\
+	\end{align*}
+
+	And:
+
+	\begin{align*}
+		\det(A_2) &= \left( 1 + \frac{1}{2s + 1} + \frac{1}{4s} \right)(sV(s)) - V(s)\left( -\frac{1}{4s} \right) \\\\
+			&= \frac{1}{4}V(s) + sV(s) + \frac{1}{4s}V(s) + \frac{s}{2s + 1}V(s) \\\\
+			&= \frac{\left( 8s^3 + 10s^2 + 3s + 1 \right)V(s)}{8s^2 + 4s} \\
+	\end{align*}
+
+	Hence, we have that:
+
+	\begin{align*}
+		V_3(s) &= \frac{\det(A_2)}{\det(A)} \\\\
+			&= \frac{\left(8s^3 + 10s^2 + 3s + 1 \right)V(s)}{8s^2 + 4s} \div \frac{24s^4 + 30s^3 + 17s^2 + 16s + 1}{24s^3 + 12s^2} \\\\
+			&= \frac{\left(24s^4 + 30s^3 + 9s^2 + 3s \right)V(s)}{24s^4 + 30s^3 + 17s^2 + 16s + 1} \\
+	\end{align*}
+
+	And since $V_c(s) = V(s) - V_3(s)$:
+
+	\begin{align*}
+		V_c(s) &= V - \frac{\left(24s^4 + 30s^3 + 9s^2 + 3s \right)V(s)}{24s^4 + 30s^3 + 17s^2 + 16s + 1} \\\\
+			&= \frac{\left(8s^2 + 13s + 1 \right)V(s)}{24s^4 + 30s^3 + 17s^2 + 16s + 1} \\
+	\end{align*}
+
+	And thus, $G_c(s)$ is given by:
+
+	\begin{align*}
+		G_c(s) &= \frac{V_c(s)}{V(s)} \\\\
+			&= \frac{\left(8s^2 + 13s + 1 \right)V(s)}{24s^4 + 30s^3 + 17s^2 + 16s + 1} \div V(s) \\\\
+			&= \frac{8s^2 + 13s + 1}{24s^4 + 30s^3 + 17s^2 + 16s + 1} \\\\
+	\end{align*}
+\end{solution}
+
+\ifdefined\iscombined
+	\newpage
+\else
+	\end{document}
+\fi
